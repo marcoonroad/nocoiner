@@ -1,0 +1,28 @@
+opam-version: "2.0"
+name: "nocoiner"
+version: "0.0.1"
+synopsis: "A Commitment Scheme library for Coin Flipping/Tossing algorithms and sort"
+description: """
+A commitment scheme based on AES-CBC for encryption and on Blake2B for checksum
+message verification which also maintains the hiding and binding properties of
+the commitment schemes on the wild.
+"""
+maintainer: "Marco Aurélio da Silva <marcoonroad@gmail.com>"
+authors: ["Marco Aurélio da Silva <marcoonroad@gmail.com>"]
+homepage: "https://github.com/marcoonroad/nocoiner"
+bug-reports: "https://github.com/marcoonroad/nocoiner/issues"
+dev-repo: "git+https://github.com/marcoonroad/nocoiner.git"
+
+build: [
+  ["dune" "build" "-p" name]
+]
+
+run-test: ["dune" "runtest" "-p" name]
+
+depends: [
+  "dune" {build}
+  "alcotest" {test}
+  "nocrypto" {>= "0.5.4-1"}
+  "core" {>= "v0.9.1"}
+  "bisect_ppx" {>= "1.4.1"}
+]

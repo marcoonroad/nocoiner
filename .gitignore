@@ -1,0 +1,5 @@
+_build/
+coverage/
+dune-workspace
+.merlin
+bisect*.out
