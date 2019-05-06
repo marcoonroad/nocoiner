@@ -3,9 +3,14 @@ name: "nocoiner"
 version: "0.0.1"
 synopsis: "A Commitment Scheme library for Coin Flipping/Tossing algorithms and sort"
 description: """
-A commitment scheme based on AES-CBC for encryption and on Blake2B for checksum
-message verification which also maintains the hiding and binding properties of
-the commitment schemes on the wild.
+This project implements Commitment Schemes using the
+Galois/Counter Mode (GCM) of secret-key encryption. Because this AES
+encryption mode provides both Message Confidentiality and Integrity, it fits
+perfectly the Hiding and Binding properties of Commitment Schemes.
+Confidentiality protects the message against passive attacks while integrity
+protects it from active attacks. GCM, so, works as an
+Authenticated Encryption where it roughly works as an encryption algorithm
+with MAC signatures on cipher data.
 """
 maintainer: "Marco Aurélio da Silva <marcoonroad@gmail.com>"
 authors: ["Marco Aurélio da Silva <marcoonroad@gmail.com>"]
