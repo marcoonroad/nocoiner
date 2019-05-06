@@ -3,5 +3,5 @@
   (flags
    (:standard -w +42)))
  (release
-  (flags
+  (ocamlopt_flags
    (:standard -O3))))
