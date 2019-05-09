@@ -56,11 +56,12 @@ docs: build
 	@ mv ./_build/default/_doc/_html/* ./docs/apiref/
 
 deps:
-	@ opam install . --deps-only
+	@ opam install . --deps-only --yes
 
 dev-deps:
 	@ opam install \
 		odoc \
+		alcotest \
 		ocp-indent \
 		ocamlformat \
 		merlin \
@@ -70,6 +71,7 @@ dev-deps:
 	@ opam update --yes
 	@ opam upgrade \
 		odoc \
+		alcotest \
 		ocp-indent \
 		ocamlformat \
 		merlin \
@@ -83,3 +85,6 @@ lint-format:
 format:
 	@ dune build @fmt --auto-promote || \
 	  echo "\n=== Code was formatted for standards compliance. ===\n"
+
+utop:
+	@ dune utop lib

@@ -4,3 +4,4 @@ dune-workspace
 .merlin
 bisect*.out
 nocoiner.install
+node_modules/
