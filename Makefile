@@ -40,6 +40,20 @@ coverage: clear
 		`find . -name 'bisect*.out'`
 	@ mv ./coverage/* ./docs/coverage/
 
+# coverage: clean
+#	rm -rf docs/coverage
+#	rm -vf `find . -name 'bisect*.out'`
+#	mkdir -p docs/coverage
+#	BISECT_ENABLE=YES make test
+#	bisect-ppx-report -html coverage/ -I _build/default `find . -name 'bisect*.out'`
+#	make doc-index
+#	mv coverage/* docs/coverage/
+#	bisect-ppx-report -I _build/default/ -text - `find . -name 'bisect*.out'`
+
+report: coverage
+	@ opam install ocveralls --yes
+	@ ocveralls --prefix '_build/default' `find . -name 'bisect*.out'` --send
+
 #	echo "" > docs/index.md
 #	echo "---" >> docs/index.md
 #	echo "---" >> docs/index.md
@@ -61,6 +75,7 @@ deps:
 dev-deps:
 	@ opam install \
 		odoc \
+		ocveralls \
 		alcotest \
 		ocp-indent \
 		ocamlformat \
@@ -71,6 +86,7 @@ dev-deps:
 	@ opam update --yes
 	@ opam upgrade \
 		odoc \
+		ocveralls \
 		alcotest \
 		ocp-indent \
 		ocamlformat \

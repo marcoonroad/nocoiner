@@ -4,6 +4,7 @@ nocoiner
 A Commitment Scheme library for Coin Flipping/Tossing algorithms and sort.
 
 [![Build Status](https://travis-ci.com/marcoonroad/nocoiner.svg?branch=master)](https://travis-ci.com/marcoonroad/nocoiner)
+[![Coverage Status](https://coveralls.io/repos/github/marcoonroad/nocoiner/badge.svg?branch=master)](https://coveralls.io/github/marcoonroad/nocoiner?branch=master)
 
 ### About
 

@@ -7,6 +7,9 @@ env:
     - PACKAGE=nocoiner
     - UPDATE_GCC_BINUTILS=1
     - OPAM_VERSION="2.0.0"
+    - BISECT_ENABLE=YES
+    - BISECT_SILENT=YES
+    - POST_INSTALL_HOOK="make report"
   matrix:
     - OCAML_VERSION=4.03
     - OCAML_VERSION=4.04
