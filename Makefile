@@ -25,7 +25,7 @@ clear:
 
 coverage: clear
 	@ mkdir -p docs/
-	@ rm -rf docs/coverage
+	@ rm -rf docs/apicov
 	@ mkdir -p docs/apicov
 	@ BISECT_ENABLE=yes make build
 	@ BISECT_ENABLE=yes make test
@@ -109,3 +109,9 @@ format:
 
 utop:
 	@ dune utop lib
+
+local-site-setup:
+	@ cd docs && bundle install --path vendor/bundle && cd ..
+
+local-site-start:
+	@ cd docs && bundle exec jekyll serve && cd ..

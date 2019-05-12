@@ -47,7 +47,7 @@ $ make test
 
 ### Usage
 
-As library:
+As library (assuming you have linked the package `nocoiner` below):
 
 ```ocaml
 let secret = "I have nothing to hide."
@@ -67,17 +67,17 @@ As the command-line interface (ignore all the `$` below while typing):
 
 ```shell
 $ echo "Something not really secret..." > secret.txt
-$
 $ cat secret.txt | nocoiner commit \
   --commitment-file=commitment-box.txt \
   --opening-file=opening-key.txt
-$
 $ nocoiner reveal \
   --commitment-file=commitment-box.txt \
   --opening-file=opening-key.txt > secret-output.txt
-$
 $ cat secret-output.txt
 ```
+
+The complete API reference is available [here][7]. Coverage reports are
+generated too, please refer to the respective [page][8].
 
 ### Disclaimer
 
@@ -103,3 +103,5 @@ nonce into account, in the same sense of [Elliott's CUID][5] library.
   [4]: https://en.wikipedia.org/wiki/Secret_sharing
   [5]: https://github.com/ericelliott/cuid
   [6]: https://en.wikipedia.org/wiki/Authenticated_encryption
+  [7]: https://marcoonroad.dev/nocoiner/apiref/nocoiner/Nocoiner/index.html
+  [8]: https://marcoonroad.dev/nocoiner/apicov/index.html
