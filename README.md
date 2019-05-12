@@ -36,7 +36,7 @@ primitive in such field.
 ### Installation
 
 ```shell
-$ make install
+$ make install # 'make uninstall' reverts the changes
 ```
 
 ### Testing
@@ -46,6 +46,8 @@ $ make test
 ```
 
 ### Usage
+
+As library:
 
 ```ocaml
 let secret = "I have nothing to hide."
@@ -60,6 +62,22 @@ the following exceptions:
 - `Nocoiner.Reasons.InvalidCommitment`, if the parsing of commitment fails.
 - `Nocoiner.Reasons.InvalidOpening`, if the opening key contains invalid data.
 - `Nocoiner.Reasons.BindingFailure`, if both commitment & opening are unrelated.
+
+As the command-line interface (ignore all the `$` below while typing):
+
+```shell
+$ echo "Something not really secret..." > secret.txt
+$
+$ cat secret.txt | nocoiner commit \
+  --commitment-file=commitment-box.txt \
+  --opening-file=opening-key.txt
+$
+$ nocoiner reveal \
+  --commitment-file=commitment-box.txt \
+  --opening-file=opening-key.txt > secret-output.txt
+$
+$ cat secret-output.txt
+```
 
 ### Disclaimer
 

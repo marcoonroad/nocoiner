@@ -1,0 +1,6 @@
+(executable
+ (name program)
+ (public_name nocoiner)
+ (package nocoiner)
+ (libraries nocoiner cmdliner)
+ (modules program helpers commands))

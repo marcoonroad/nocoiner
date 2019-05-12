@@ -11,6 +11,7 @@ let __random_bits bits =
   NumZ.to_cstruct_be @@ RngZ.gen_r _min_random _max_random
 
 let key () = __random_bits 256
+
 let iv () = __random_bits 160
 
 let _ = Nocrypto_entropy_unix.initialize ()
