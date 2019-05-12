@@ -20,6 +20,7 @@ uninstall:
 	@ dune uninstall
 
 clear:
+	@ rm -rfv bisect*.out
 	@ dune clean
 
 coverage: clear
@@ -50,7 +51,7 @@ coverage: clear
 #	mv coverage/* docs/coverage/
 #	bisect-ppx-report -I _build/default/ -text - `find . -name 'bisect*.out'`
 
-report: dev-deps coverage
+report: deps coverage
 	@ opam install ocveralls --yes
 	@ ocveralls --prefix '_build/default' `find . -name 'bisect*.out'` --send
 
@@ -74,6 +75,7 @@ pin:
 
 deps:
 	@ opam install . --deps-only --yes
+	@ opam install alcotest core --yes # force such test dependences
 
 dev-deps:
 	@ opam install \
