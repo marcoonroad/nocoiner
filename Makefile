@@ -30,7 +30,7 @@ coverage: clear
 	@ BISECT_ENABLE=yes make build
 	@ BISECT_ENABLE=yes make test
 	@ bisect-ppx-report \
-	  -title shareholders \
+	  -title nocoiner \
 		-I _build/default/ \
 		-tab-size 2 \
 		-html coverage/ \
