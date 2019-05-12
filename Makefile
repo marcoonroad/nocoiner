@@ -26,7 +26,7 @@ clear:
 coverage: clear
 	@ mkdir -p docs/
 	@ rm -rf docs/coverage
-	@ mkdir -p docs/coverage
+	@ mkdir -p docs/apicov
 	@ BISECT_ENABLE=yes make build
 	@ BISECT_ENABLE=yes make test
 	@ bisect-ppx-report \
@@ -39,7 +39,7 @@ coverage: clear
 		-I _build/default/ \
 		-text - \
 		`find . -name 'bisect*.out'`
-	@ mv ./coverage/* ./docs/coverage/
+	@ mv ./coverage/* ./docs/apicov
 
 # coverage: clean
 #	rm -rf docs/coverage
