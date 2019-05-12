@@ -30,18 +30,44 @@ let files_term =
   let open Cmdliner in
   Term.(const files $ commit_file $ open_file)
 
-let commit_cmd files force =
-  Commands.commit ~force files.commitment files.opening
+module R = Nocoiner.Reasons
+module H = Helpers
 
-let reveal_cmd files = Commands.reveal files.commitment files.opening
+let commit_cmd files force =
+  try
+    let result = Commands.commit ~force files.commitment files.opening in
+    `Ok result
+  with
+  | Sys_error reason ->
+      `Error (false, H.system_error reason)
+  | H.CantOverwrite message ->
+      `Error (true, message)
+
+let reveal_cmd files =
+  let cfile = files.commitment in
+  let ofile = files.opening in
+  try
+    let result = Commands.reveal cfile ofile in
+    `Ok result
+  with
+  | Sys_error reason ->
+      `Error (false, H.system_error reason)
+  | R.InvalidOpening ->
+      `Error (false, H.invalid_open ofile)
+  | R.InvalidCommitment ->
+      `Error (false, H.invalid_commit cfile)
+  | R.BindingFailure ->
+      `Error (false, H.invalid_pairs cfile ofile)
 
 let commit_term =
   let open Cmdliner in
-  Term.(const commit_cmd $ files_term $ force_overwrite)
+  let term = Term.(const commit_cmd $ files_term $ force_overwrite) in
+  Term.ret term
 
 let reveal_term =
   let open Cmdliner in
-  Term.(const reveal_cmd $ files_term)
+  let term = Term.(const reveal_cmd $ files_term) in
+  Term.ret term
 
 let issues_url = "https://github.com/marcoonroad/nocoiner/issues"
 
