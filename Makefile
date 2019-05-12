@@ -50,7 +50,7 @@ coverage: clear
 #	mv coverage/* docs/coverage/
 #	bisect-ppx-report -I _build/default/ -text - `find . -name 'bisect*.out'`
 
-report: coverage
+report: dev-deps coverage
 	@ opam install ocveralls --yes
 	@ ocveralls --prefix '_build/default' `find . -name 'bisect*.out'` --send
 
@@ -68,6 +68,9 @@ docs: build
 	@ make doc-index
 	@ dune build @doc
 	@ mv ./_build/default/_doc/_html/* ./docs/apiref/
+
+pin:
+	@ opam pin add nocoiner . -n --yes
 
 deps:
 	@ opam install . --deps-only --yes
