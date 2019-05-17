@@ -2,28 +2,53 @@ module String = Core.String
 module List = Core.List
 module Blake2B = Digestif.BLAKE2B
 
-let string_to_hex data =
-  Hex.show @@ Hex.of_string data
+let string_to_hex data = Hex.show @@ Hex.of_string data
 
-let string_of_hex hex =
-  Hex.to_string (`Hex hex)
+let string_of_hex hex = Hex.to_string (`Hex hex)
 
-let __not_missing char =
-  char != '?'
+let __not_missing char = char != '?'
 
 let __const_zero _ = 0
 
-let __digest data =
-  Blake2B.to_hex @@ Blake2B.digest_string data
+let __digest data = Blake2B.to_hex @@ Blake2B.digest_string data
 
 let __hex_of_int = function
-  |  0 -> '0' |  1 -> '1' |  2 -> '2' |  3 -> '3'
-  |  4 -> '4' |  5 -> '5' |  6 -> '6' |  7 -> '7'
-  |  8 -> '8' |  9 -> '9' | 10 -> 'a' | 11 -> 'b'
-  | 12 -> 'c' | 13 -> 'd' | 14 -> 'e' | 15 -> 'f'
-  |  _ -> failwith "Invalid hex number!"
+  | 0 ->
+      '0'
+  | 1 ->
+      '1'
+  | 2 ->
+      '2'
+  | 3 ->
+      '3'
+  | 4 ->
+      '4'
+  | 5 ->
+      '5'
+  | 6 ->
+      '6'
+  | 7 ->
+      '7'
+  | 8 ->
+      '8'
+  | 9 ->
+      '9'
+  | 10 ->
+      'a'
+  | 11 ->
+      'b'
+  | 12 ->
+      'c'
+  | 13 ->
+      'd'
+  | 14 ->
+      'e'
+  | 15 ->
+      'f'
+  | _ ->
+      failwith "Invalid hex number!"
 
-let generate ?difficulty:(amount=1) message =
+let generate ?difficulty:(amount = 1) message =
   let hex_message = string_to_hex message in
   let hash = __digest message in
   let hex_length = String.length hex_message in
@@ -41,9 +66,12 @@ let __buffer_to_hex_string buffer =
   String.of_char_list hex_chars
 
 let rec __tick_step = function
-| [] -> []
-| 15 :: rest -> 0 :: __tick_step rest
-| node :: rest -> (node + 1) :: rest
+  | [] ->
+      []
+  | 15 :: rest ->
+      0 :: __tick_step rest
+  | node :: rest ->
+      (node + 1) :: rest
 
 exception ExhaustedBruteForce
 
@@ -58,8 +86,9 @@ let break ~message ~hash =
     let suffix = __buffer_to_hex_string buffer in
     let hex_candidate = known ^ suffix in
     let result = __digest @@ string_of_hex hex_candidate in
-    if result = hash then suffix else
-    let next = __tick_buffer buffer in
-    __loop next
+    if result = hash then suffix
+    else
+      let next = __tick_buffer buffer in
+      __loop next
   in
   string_of_hex @@ known ^ __loop buffer

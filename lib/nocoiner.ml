@@ -29,6 +29,9 @@ let reveal ~commitment ~opening =
   let open Reasons in
   let key, iv = __split ~reason:InvalidOpening ~on:'.' opening in
   let cipher, tag = __split ~reason:InvalidCommitment ~on:'@' commitment in
-  let payload = Encryption.decrypt ~reason:BindingFailure ~key ~iv ~cipher ~tag in
+  let payload =
+    Encryption.decrypt ~reason:BindingFailure ~key ~iv ~cipher ~tag
+  in
   let parts = String.split ~on:':' payload in
-  Encoding.decode @@ List.nth_exn parts 0 (* discards fingerprint at index 1 *)
+  (* discards fingerprint at index 1 *)
+  Encoding.decode @@ List.nth_exn parts 0
