@@ -13,7 +13,7 @@ module Reasons : sig
   exception BindingFailure
 end
 
-val commit : string -> string * string
+val commit : ?difficulty:int -> string -> string * string
 (**
    Operation which generates both a commitment box and an opening key,
    respectively, from a secret input. This operation is non-deterministic in
@@ -31,4 +31,12 @@ val reveal : commitment:string -> opening:string -> string
    @raise Reasons.InvalidCommitment if fails to parse commitment.
    @raise Reasons.InvalidOpening if fails to parse the opening key.
    @raise Reasons.BindingFailure if the pairs are not related.
+*)
+
+val break : string -> string
+(**
+   Operation which performs a hard-but-possible crypto-analysis to recover
+   the opening through brute-force.
+
+   @raise Reasons.ExhaustedBruteForce if can't recover the opening key due bogus mismatch.
 *)

@@ -1,16 +1,15 @@
 module String = Core.String
 module List = Core.List
-module Blake2B = Digestif.BLAKE2B
 
-let string_to_hex data = Hex.show @@ Hex.of_string data
+let string_to_hex = Helpers.string_to_hex
 
-let string_of_hex hex = Hex.to_string (`Hex hex)
+let string_of_hex = Helpers.string_of_hex
 
 let __not_missing char = char != '?'
 
 let __const_zero _ = 0
 
-let __digest data = Blake2B.to_hex @@ Blake2B.digest_string data
+let __digest = Hashing.hash
 
 let __hex_of_int = function
   | 0 ->
@@ -73,10 +72,8 @@ let rec __tick_step = function
   | node :: rest ->
       (node + 1) :: rest
 
-exception ExhaustedBruteForce
-
 let __tick_buffer buffer =
-  if exhausted buffer then raise ExhaustedBruteForce else __tick_step buffer
+  if exhausted buffer then raise Exceptions.ExhaustedBruteForce else __tick_step buffer
 
 let break ~message ~hash =
   let known = String.filter ~f:__not_missing message in

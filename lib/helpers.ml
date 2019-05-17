@@ -14,3 +14,11 @@ let pad ~basis msg =
 let __nonzero char = char != __nullchar
 
 let unpad msg = Encoding.decode @@ String.filter ~f:__nonzero msg
+
+let string_to_hex data = Hex.show @@ Hex.of_string data
+
+let string_of_hex hex = Hex.to_string (`Hex hex)
+
+let hex_of_base64 data = string_to_hex @@ Encoding.decode data
+
+let hex_to_base64 hex = Encoding.encode @@ string_of_hex hex

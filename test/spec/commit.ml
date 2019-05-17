@@ -1,4 +1,10 @@
+module String = Core.String
+module List = Core.List
+
 let _SECRET = "I don't know programming! I can't even code 2 + 2!"
+
+let __take_commit data =
+  List.nth_exn (String.split ~on:'$' data) 0
 
 let __nondeterministic_commitment _ =
   let c1, o1 = Nocoiner.commit _SECRET in
@@ -7,9 +13,9 @@ let __nondeterministic_commitment _ =
   let ky1, iv1 = Helpers.__split ~on:'.' o1 in
   let ky2, iv2 = Helpers.__split ~on:'.' o2 in
   let ky3, iv3 = Helpers.__split ~on:'.' o3 in
-  let cp1, tg1 = Helpers.__split ~on:'@' c1 in
-  let cp2, tg2 = Helpers.__split ~on:'@' c2 in
-  let cp3, tg3 = Helpers.__split ~on:'@' c3 in
+  let cp1, tg1 = Helpers.__split ~on:'@' @@ __take_commit c1 in
+  let cp2, tg2 = Helpers.__split ~on:'@' @@ __take_commit c2 in
+  let cp3, tg3 = Helpers.__split ~on:'@' @@ __take_commit c3 in
   Alcotest.(check @@ neg string) "commitments differ" c1 c2 ;
   Alcotest.(check @@ neg string) "commitments differ" c1 c3 ;
   Alcotest.(check @@ neg string) "commitments differ" c3 c2 ;
