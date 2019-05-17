@@ -8,7 +8,9 @@ let __join ~on left right =
 let commit message =
   let key = Entropy.key () in
   let iv = Entropy.iv () in
-  let cipher, tag = Encryption.encrypt ~key ~iv ~message in
+  let fingerprint = Fingerprint.id () in
+  let payload = Encoding.encode message ^ ":" ^ fingerprint in
+  let cipher, tag = Encryption.encrypt ~key ~iv ~message:payload in
   let commitment = __join cipher ~on:"@" tag in
   let opening = __join key ~on:"." iv in
   (commitment, opening)
@@ -27,4 +29,6 @@ let reveal ~commitment ~opening =
   let open Reasons in
   let key, iv = __split ~reason:InvalidOpening ~on:'.' opening in
   let cipher, tag = __split ~reason:InvalidCommitment ~on:'@' commitment in
-  Encryption.decrypt ~reason:BindingFailure ~key ~iv ~cipher ~tag
+  let payload = Encryption.decrypt ~reason:BindingFailure ~key ~iv ~cipher ~tag in
+  let parts = String.split ~on:':' payload in
+  Encoding.decode @@ List.nth_exn parts 0 (* discards fingerprint at index 1 *)
