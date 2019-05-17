@@ -2,7 +2,7 @@
  (name nocoiner)
  (public_name nocoiner)
  (wrapped true)
- (libraries core nocrypto.unix nocrypto digestif digestif.c)
+ (libraries core hex nocrypto.unix nocrypto digestif digestif.c)
  (synopsis "The Nocoiner module for nocoiner library.")
  (preprocess
   (pps bisect_ppx -conditional -no-comment-parsing)))
