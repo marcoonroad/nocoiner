@@ -93,9 +93,11 @@ should as well deal with that on your code logic. The random encryption key
 and input vector only ensure the _uniqueness locally_, it's also possible to
 happen collisions of both random data on a distributed setting (it's due the
 sources of entropy being remote and different - so commitments and openings
-would be identical, think on that even if this probability is small). In such
+would be identical, think on that even if this probability is small). ~~In such
 case, you can either take a fingerprint of the host machine and a timestamp
-nonce into account, in the same sense of [Elliott's CUID][5] library.
+nonce into account, in the same sense of [Elliott's CUID][5] library~~ (we already
+cover that issue of distributed collisions by using a fingerprint of hashed
+process context).
 
   [1]: https://en.wikipedia.org/wiki/Commitment_scheme
   [2]: https://en.wikipedia.org/wiki/Galois/Counter_Mode

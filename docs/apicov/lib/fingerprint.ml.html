@@ -8,7 +8,7 @@
     <div id="header">
       <h1>
         <a href="../index.html">
-          <span class="dirname">lib/</span>encoding.ml
+          <span class="dirname">lib/</span>fingerprint.ml
         </a>
       </h1>
       <h2>100.00%</h2>
@@ -20,15 +20,15 @@
         <pre>
 <a id="L1"></a><span > </span>
 <a id="L2"></a><span > </span>
-<a id="L3"></a><span class="visited"> </span>
-<a id="L4"></a><span > </span>
-<a id="L5"></a><span class="visited"> </span>
+<a id="L3"></a><span > </span>
+<a id="L4"></a><span class="visited"> </span>
+<a id="L5"></a><span > </span>
 <a id="L6"></a><span > </span>
-<a id="L7"></a><span > </span>
+<a id="L7"></a><span class="visited"> </span>
 <a id="L8"></a><span class="visited"> </span>
 <a id="L9"></a><span class="visited"> </span>
 <a id="L10"></a><span class="visited"> </span>
-<a id="L11"></a><span > </span>
+<a id="L11"></a><span class="visited"> </span>
 <a id="L12"></a><span class="visited"> </span>
 <a id="L13"></a><span > </span>
 <a id="L14"></a><span > </span>
@@ -54,21 +54,21 @@
 <a href="#L15">15</a>
 </pre>
         <pre id="code">
-module Base64 = Nocrypto.Base64
+module Blake = Digestif.BLAKE2B
 
-let encode_blob cstruct = <span data-count="56">C</span>struct.to_string @@ Base64.encode cstruct
+let hash data =
+  <span data-count="40">C</span>struct.of_hex @@ Blake.to_hex @@ Blake.digest_string data
 
-let encode message = <span data-count="24">e</span>ncode_blob @@ Cstruct.of_string message
-
-let decode_as_blob encoded =
-  <span data-count="347">l</span>et nullable = <span data-count="347">B</span>ase64.decode @@ Cstruct.of_string encoded in
-  <span data-count="347">m</span>atch nullable with
-  | <span data-count="346">S</span>ome value -&gt;
-      value
-  | <span data-count="1">N</span>one -&gt;
-      failwith "Failed to decode Base 64 blob!"
-
-let decode encoded = <span data-count="106">C</span>struct.to_string @@ decode_as_blob encoded
+let id ( ) =
+  <span data-count="8">l</span>et timestamp = <span data-count="8">h</span>ash @@ string_of_float @@ Unix.gettimeofday ( ) in
+  <span data-count="8">l</span>et pid = <span data-count="8">h</span>ash @@ string_of_int @@ Unix.getpid ( ) in
+  <span data-count="8">l</span>et hostname = <span data-count="8">h</span>ash @@ Unix.gethostname ( ) in
+  <span data-count="8">l</span>et cwd = <span data-count="8">h</span>ash @@ Unix.getcwd ( ) in
+  <span data-count="8">l</span>et login = <span data-count="8">h</span>ash @@ Unix.getlogin ( ) in
+  <span data-count="8">l</span>et context = <span data-count="8">C</span>struct.to_bytes @@ Cstruct.concat [
+    timestamp; pid; hostname; cwd; login
+  ] in
+  <span data-count="8">E</span>ncoding.encode @@ Blake.to_raw_string @@ Blake.digest_bytes context
 </pre>
       </div>
     </div>
