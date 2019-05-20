@@ -1,4 +1,5 @@
 _build/
+nocoiner.exe
 coverage/
 dune-workspace
 .merlin
