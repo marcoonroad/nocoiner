@@ -30,6 +30,8 @@ depends: [
   "alcotest" {with-test}
   "nocrypto" {>= "0.5.4-1"}
   "digestif" {>= "0.7.0"}
+  "hex" {>= "1.4.0"}
   "core" {>= "v0.9.1"}
   "bisect_ppx" {>= "1.4.1"}
 ]
+
