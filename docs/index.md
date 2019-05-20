@@ -1,6 +1,10 @@
 nocoiner
 ========
 
+<center>
+<img src="https://marcoonroad.dev/nocoiner/images/nocoiner.png" width="200" height="200" alt="nocoiner logo"/>
+</center>
+
 A Commitment Scheme library for Coin Flipping/Tossing algorithms and sort.
 
 [![Build Status](https://travis-ci.com/marcoonroad/nocoiner.svg?branch=master)](https://travis-ci.com/marcoonroad/nocoiner)
