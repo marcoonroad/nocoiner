@@ -122,6 +122,9 @@ binary: clear
 	@ cp `dune exec --profile deploy -- which nocoiner` ./nocoiner.exe
 	@ chmod a+rx ./nocoiner.exe
 
+image-prune:
+	@ docker system prune --force --volumes
+
 image:
 	@ docker build -t marcoonroad/nocoiner -f ./Dockerfile ./
 	@ docker cp `docker create marcoonroad/nocoiner`:/usr/bin/nocoiner ./nocoiner.exe

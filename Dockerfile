@@ -1,12 +1,10 @@
 FROM ocaml/opam2:alpine
 WORKDIR /home/opam/project
 RUN opam update
-RUN sudo apk add m4
+RUN sudo apk add m4 linux-headers gmp-dev perl
 RUN opam depext ssl
 RUN opam install ssl alcotest
 COPY nocoiner.opam ./
-RUN sudo apk add gmp-dev perl
-RUN sudo apk add linux-headers
 RUN opam install --deps-only .
 COPY ./ ./
 RUN sudo chmod a+rw -R ./
