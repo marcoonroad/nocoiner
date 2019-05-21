@@ -5,6 +5,16 @@ A Commitment Scheme library for Coin Flipping/Tossing algorithms and sort.
 
 [![Build Status](https://travis-ci.com/marcoonroad/nocoiner.svg?branch=master)](https://travis-ci.com/marcoonroad/nocoiner)
 [![Coverage Status](https://coveralls.io/repos/github/marcoonroad/nocoiner/badge.svg?branch=master)](https://coveralls.io/github/marcoonroad/nocoiner?branch=master)
+![GitHub](https://img.shields.io/github/license/marcoonroad/nocoiner.svg)
+
+---
+
+![Docker Automated build](https://img.shields.io/docker/automated/marcoonroad/nocoiner.svg)
+![Docker Build Status](https://img.shields.io/docker/build/marcoonroad/nocoiner.svg)
+![Docker Pulls](https://img.shields.io/docker/pulls/marcoonroad/nocoiner.svg)
+![Docker Stars](https://img.shields.io/docker/stars/marcoonroad/nocoiner.svg)
+![MicroBadger Layers (tag)](https://img.shields.io/microbadger/layers/marcoonroad/nocoiner/latest.svg)
+![MicroBadger Size](https://img.shields.io/microbadger/image-size/marcoonroad/nocoiner.svg)
 
 ### About
 
