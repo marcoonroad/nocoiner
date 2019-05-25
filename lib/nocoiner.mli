@@ -24,24 +24,24 @@ val commit : ?difficulty:int -> string -> string * string
    the sense of producing different pairs every time it is invoked, no matter
    if the input is always the same.
 
-   The [difficulty] is a exponential number of combinations from ASCII
-   space to guess, that is, 256 raised to power [difficulty]. The default
-   [difficulty] is 5. For long multiparty games, you must increase this
+   The [difficulty] is a exponential number of combinations from hexadecimal
+   space to guess, that is, 16 raised to power [difficulty]. The default
+   [difficulty] is 7. For long multiparty games, you must increase this
    [difficulty]. This impacts the amount of time consumed to force the opening
    through the [break] operation.
 
-   @raise Reasons.InvalidDifficulty if difficulty is lower than 7.
+   @raise Reasons.InvalidDifficulty if [difficulty] is lower than 7.
 *)
 
 val reveal : commitment:string -> opening:string -> string
 (**
-   Operation which generates the original secret from given commitment and
-   opening. Fails if the opening key is not linked to the commitment. This
+   Operation which generates the original secret from given [commitment] and
+   [opening]. Fails if the [opening] key is not linked to the [commitment]. This
    operation is deterministic, no matter how much time you call that, it will
    always produce the same result (or failure).
 
-   @raise Reasons.InvalidCommitment if fails to parse commitment.
-   @raise Reasons.InvalidOpening if fails to parse the opening key.
+   @raise Reasons.InvalidCommitment if fails to parse [commitment].
+   @raise Reasons.InvalidOpening if fails to parse the [opening] key.
    @raise Reasons.BindingFailure if the pairs are not related.
 *)
 
