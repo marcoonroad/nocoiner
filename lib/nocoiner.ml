@@ -5,26 +5,26 @@ module List = Core.List
 let __join ~on left right =
   Encoding.encode_blob left ^ on ^ Encoding.encode_blob right
 
-let __hex_join ~on left right =
-  left ^ on ^ right
+let __hex_join ~on left right = left ^ on ^ right
 
-let commit ?(difficulty=5) message =
-  if difficulty < 3 then raise Reasons.InvalidDifficulty else
-  let key = Entropy.key () in
-  let iv = Entropy.iv () in
-  let fingerprint = Fingerprint.id () in
-  let payload = Encoding.encode message ^ ":" ^ fingerprint in
-  let cipher, tag = Encryption.encrypt ~key ~iv ~message:payload in
-  let commitment = __join cipher ~on:"@" tag in
-  let opening = __join key ~on:"." iv in
-  let key_hex = Helpers.hex_of_base64 @@ Encoding.encode_blob key in
-  let iv_hex = Helpers.hex_of_base64 @@ Encoding.encode_blob iv in
-  let (key_masked, key_hash) = Analysis.generate ~difficulty key_hex in
-  let (iv_masked, iv_hash) = Analysis.generate ~difficulty iv_hex in
-  let key_piece = __hex_join key_masked ~on:" " key_hash in
-  let iv_piece = __hex_join iv_masked ~on:" " iv_hash in
-  let piece = key_piece ^ "%" ^ iv_piece in
-  (commitment ^ "$" ^ piece, opening)
+let commit ?(difficulty = 5) message =
+  if difficulty < 3 then raise Reasons.InvalidDifficulty
+  else
+    let key = Entropy.key () in
+    let iv = Entropy.iv () in
+    let fingerprint = Fingerprint.id () in
+    let payload = Encoding.encode message ^ ":" ^ fingerprint in
+    let cipher, tag = Encryption.encrypt ~key ~iv ~message:payload in
+    let commitment = __join cipher ~on:"@" tag in
+    let opening = __join key ~on:"." iv in
+    let key_hex = Helpers.hex_of_base64 @@ Encoding.encode_blob key in
+    let iv_hex = Helpers.hex_of_base64 @@ Encoding.encode_blob iv in
+    let key_masked, key_hash = Analysis.generate ~difficulty key_hex in
+    let iv_masked, iv_hash = Analysis.generate ~difficulty iv_hex in
+    let key_piece = __hex_join key_masked ~on:" " key_hash in
+    let iv_piece = __hex_join iv_masked ~on:" " iv_hash in
+    let piece = key_piece ^ "%" ^ iv_piece in
+    (commitment ^ "$" ^ piece, opening)
 
 let __decode ~reason data =
   try Encoding.decode_as_blob data with _ -> raise reason

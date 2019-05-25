@@ -73,7 +73,8 @@ let rec __tick_step = function
       (node + 1) :: rest
 
 let __tick_buffer buffer =
-  if exhausted buffer then raise Exceptions.ExhaustedBruteForce else __tick_step buffer
+  if exhausted buffer then raise Exceptions.ExhaustedBruteForce
+  else __tick_step buffer
 
 let break ~message ~hash =
   let known = String.filter ~f:__not_missing message in

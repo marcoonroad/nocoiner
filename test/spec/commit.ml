@@ -3,8 +3,7 @@ module List = Core.List
 
 let _SECRET = "I don't know programming! I can't even code 2 + 2!"
 
-let __take_commit data =
-  List.nth_exn (String.split ~on:'$' data) 0
+let __take_commit data = List.nth_exn (String.split ~on:'$' data) 0
 
 let __nondeterministic_commitment _ =
   let c1, o1 = Nocoiner.commit _SECRET in
