@@ -11,6 +11,10 @@ module Reasons : sig
   exception InvalidOpening
 
   exception BindingFailure
+
+  exception ExhaustedBruteForce
+
+  exception InvalidDifficulty
 end
 
 val commit : ?difficulty:int -> string -> string * string
@@ -19,6 +23,14 @@ val commit : ?difficulty:int -> string -> string * string
    respectively, from a secret input. This operation is non-deterministic in
    the sense of producing different pairs every time it is invoked, no matter
    if the input is always the same.
+
+   The [difficulty] is a exponential number of combinations from ASCII
+   space to guess, that is, 256 raised to power [difficulty]. The default
+   [difficulty] is 5. For long multiparty games, you must increase this
+   [difficulty]. This impacts the amount of time consumed to force the opening
+   through the [break] operation.
+
+   @raise Reasons.InvalidDifficulty if difficulty is lower than 3.
 *)
 
 val reveal : commitment:string -> opening:string -> string

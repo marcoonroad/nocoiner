@@ -9,6 +9,7 @@ let __hex_join ~on left right =
   left ^ on ^ right
 
 let commit ?(difficulty=5) message =
+  if difficulty < 3 then raise Reasons.InvalidDifficulty else
   let key = Entropy.key () in
   let iv = Entropy.iv () in
   let fingerprint = Fingerprint.id () in

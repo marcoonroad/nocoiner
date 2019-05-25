@@ -5,3 +5,5 @@ exception InvalidOpening
 exception BindingFailure
 
 exception ExhaustedBruteForce
+
+exception InvalidDifficulty
