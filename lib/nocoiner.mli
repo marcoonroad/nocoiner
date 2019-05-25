@@ -30,7 +30,7 @@ val commit : ?difficulty:int -> string -> string * string
    [difficulty]. This impacts the amount of time consumed to force the opening
    through the [break] operation.
 
-   @raise Reasons.InvalidDifficulty if difficulty is lower than 3.
+   @raise Reasons.InvalidDifficulty if difficulty is lower than 7.
 *)
 
 val reveal : commitment:string -> opening:string -> string

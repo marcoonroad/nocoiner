@@ -7,8 +7,8 @@ let __join ~on left right =
 
 let __hex_join ~on left right = left ^ on ^ right
 
-let commit ?(difficulty = 5) message =
-  if difficulty < 3 then raise Reasons.InvalidDifficulty
+let commit ?(difficulty = 7) message =
+  if difficulty < 7 then raise Reasons.InvalidDifficulty
   else
     let key = Entropy.key () in
     let iv = Entropy.iv () in

@@ -24,6 +24,16 @@ let force_overwrite =
   let aliases_arg = ["f"; "force"] in
   Arg.(value & flag & info aliases_arg ~doc ~docs)
 
+let difficulty_amount =
+  let open Cmdliner in
+  let doc =
+    "Parameter to configure the exponential difficulty for forced opening. \
+     Must be a number greater than or equal to 7."
+  in
+  let aliases_arg = ["d"; "difficulty"] in
+  let docv = "DIFFICULTY" in
+  Arg.(value & opt int 7 & info aliases_arg ~doc ~docv ~docs)
+
 let files commitment opening = {commitment; opening}
 
 let files_term =
@@ -33,11 +43,17 @@ let files_term =
 module R = Nocoiner.Reasons
 module H = Helpers
 
-let commit_cmd files force =
+let commit_cmd files force difficulty =
   try
-    let result = Commands.commit ~force files.commitment files.opening in
+    let result =
+      Commands.commit ~difficulty ~force files.commitment files.opening
+    in
     `Ok result
   with
+  | R.InvalidDifficulty ->
+      `Error
+        ( false
+        , "Please pass a difficulty parameter greater than or equal to 7!" )
   | Sys_error reason ->
       `Error (false, H.system_error reason)
   | H.CantOverwrite message ->
@@ -59,14 +75,31 @@ let reveal_cmd files =
   | R.BindingFailure ->
       `Error (false, H.invalid_pairs cfile ofile)
 
+let break_cmd commitment =
+  try
+    let result = Commands.break commitment in
+    `Ok result
+  with R.ExhaustedBruteForce ->
+    `Error
+      ( false
+      , "Could not force the opening, all the possible paths were searched \
+         without matching!" )
+
 let commit_term =
   let open Cmdliner in
-  let term = Term.(const commit_cmd $ files_term $ force_overwrite) in
+  let term =
+    Term.(const commit_cmd $ files_term $ force_overwrite $ difficulty_amount)
+  in
   Term.ret term
 
 let reveal_term =
   let open Cmdliner in
   let term = Term.(const reveal_cmd $ files_term) in
+  Term.ret term
+
+let break_term =
+  let open Cmdliner in
+  let term = Term.(const break_cmd $ commit_file) in
   Term.ret term
 
 let issues_url = "https://github.com/marcoonroad/nocoiner/issues"
@@ -107,6 +140,23 @@ let reveal_term_info =
   ( reveal_term
   , Term.info "reveal" ~doc ~exits:Term.default_exits ~sdocs:docs ~man )
 
+let break_term_info =
+  let open Cmdliner in
+  let man =
+    [ `S Manpage.s_description
+    ; `P
+        "Tries to recover the secret by forcing the opening with brute-force, \
+         the amount of time to recover depends on the difficulty of the \
+         commitment. The secret, if successfully revealed, is shown on \
+         process' STDOUT. In any case of errors, logs are written on STDERR."
+    ; `Blocks help_secs ]
+  in
+  let doc =
+    "Attempts to reveal the secret given only the commitment file alone"
+  in
+  ( break_term
+  , Term.info "break" ~doc ~exits:Term.default_exits ~sdocs:docs ~man )
+
 let help_term =
   let open Cmdliner in
   let cmd _ = `Help (`Auto, None) in
@@ -128,6 +178,6 @@ let default_term_info =
 
 let () =
   let open Cmdliner in
-  let term_info_cmds = [commit_term_info; reveal_term_info] in
+  let term_info_cmds = [commit_term_info; reveal_term_info; break_term_info] in
   let result = Term.(eval_choice default_term_info term_info_cmds) in
   Term.exit result
