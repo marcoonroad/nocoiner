@@ -8,25 +8,22 @@
     <div id="header">
       <h1>
         <a href="../index.html">
-          <span class="dirname">lib/</span>exceptions.ml
+          <span class="dirname">lib/</span>hashing.ml
         </a>
       </h1>
-      <h2>100.00%</h2>
+      <h2>50.00%</h2>
     </div>
     <div id="navbar">
+      <span class="unvisited" style="top:100.00%"></span>
     </div>
     <div id="report">
       <div id="lines-layer">
         <pre>
 <a id="L1"></a><span > </span>
 <a id="L2"></a><span > </span>
-<a id="L3"></a><span > </span>
+<a id="L3"></a><span class="visited"> </span>
 <a id="L4"></a><span > </span>
-<a id="L5"></a><span > </span>
-<a id="L6"></a><span > </span>
-<a id="L7"></a><span > </span>
-<a id="L8"></a><span > </span>
-<a id="L9"></a><span > </span>
+<a id="L5"></a><span class="unvisited"> </span>
 </pre>
       </div>
       <div id="text-layer">
@@ -36,21 +33,13 @@
 <a href="#L3">3</a>
 <a href="#L4">4</a>
 <a href="#L5">5</a>
-<a href="#L6">6</a>
-<a href="#L7">7</a>
-<a href="#L8">8</a>
-<a href="#L9">9</a>
 </pre>
         <pre id="code">
-exception InvalidCommitment
+module Blake2B = Digestif.BLAKE2B
 
-exception InvalidOpening
+let hash data = <span data-count="6719085">B</span>lake2B.to_hex @@ Blake2B.digest_string data
 
-exception BindingFailure
-
-exception ExhaustedBruteForce
-
-exception InvalidDifficulty
+let hash_blob blob = <span data-count="0">h</span>ash @@ Cstruct.to_string blob
 </pre>
       </div>
     </div>
