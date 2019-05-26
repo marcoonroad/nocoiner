@@ -1,9 +1,9 @@
 nocoiner
 ========
 
-<center>
+<div align="center">
 <img src="https://marcoonroad.dev/nocoiner/images/nocoiner.png" width="200" height="200" alt="nocoiner logo"/>
-</center>
+</div>
 
 A Commitment Scheme library for Coin Flipping/Tossing algorithms and sort.
 
@@ -48,6 +48,15 @@ protocols/primitives, [Secret Sharing][4] is other famous cryptographic
 primitive in such field.
 
 ### Installation
+
+For the stable release, just type:
+
+```shell
+$ opam install nocoiner
+```
+
+To install/test the unstable version on this repository (assuming you're
+inside the project's root directory):
 
 ```shell
 $ make install # 'make uninstall' reverts the changes
