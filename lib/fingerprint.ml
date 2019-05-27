@@ -8,8 +8,7 @@ let id ( ) =
   let pid = hash @@ string_of_int @@ Unix.getpid ( ) in
   let hostname = hash @@ Unix.gethostname ( ) in
   let cwd = hash @@ Unix.getcwd ( ) in
-  let login = hash @@ Unix.getlogin ( ) in
   let context = Cstruct.to_bytes @@ Cstruct.concat [
-    timestamp; pid; hostname; cwd; login
+    timestamp; pid; hostname; cwd
   ] in
   Encoding.encode @@ Blake.to_raw_string @@ Blake.digest_bytes context
