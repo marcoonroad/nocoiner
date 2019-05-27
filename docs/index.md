@@ -1,14 +1,80 @@
 nocoiner
 ========
 
-<center>
-<img src="https://marcoonroad.dev/nocoiner/images/nocoiner.png" width="200" height="200" alt="nocoiner logo"/>
-</center>
+<div align="center">
+  <img
+    src="https://marcoonroad.dev/nocoiner/images/nocoiner.png"
+    width="200"
+    height="200"
+    alt="nocoiner logo"/>
+</div>
 
-A Commitment Scheme library for Coin Flipping/Tossing algorithms and sort.
+<div align="center">
+  <p>
+    <span>A Commitment Scheme library for Coin Flipping/Tossing algorithms and sort.</span>
+  </p>
+</div>
 
-[![Build Status](https://travis-ci.com/marcoonroad/nocoiner.svg?branch=master)](https://travis-ci.com/marcoonroad/nocoiner)
-[![Coverage Status](https://coveralls.io/repos/github/marcoonroad/nocoiner/badge.svg?branch=master)](https://coveralls.io/github/marcoonroad/nocoiner?branch=master)
+<div align="center">
+<!-- Travis CI badge -->
+<a
+  style="margin: 0.1em;"
+  href="https://travis-ci.com/marcoonroad/nocoiner"
+  title="Verify the build logs here."><img
+  src="https://img.shields.io/travis/com/marcoonroad/nocoiner.svg?logo=travis&style=flat-square"/></a>
+<!-- Coveralls badge -->
+<a
+  style="margin: 0.1em;"
+  href="https://coveralls.io/github/marcoonroad/nocoiner"
+  title="Verify the detailed test coverage here."><img
+  src="https://img.shields.io/coveralls/github/marcoonroad/nocoiner.svg?style=flat-square"/></a>
+<!-- License badge -->
+<a
+  style="margin: 0.1em;"
+  href="https://github.com/marcoonroad/nocoiner/blob/master/LICENSE"
+  title="Verify the project license here."><img
+  src="https://img.shields.io/github/license/marcoonroad/nocoiner.svg?style=flat-square&logo=github"/></a>
+<!-- Open PR badge -->
+<a
+  style="margin: 0.1em;"
+  href="https://github.com/marcoonroad/nocoiner/compare"
+  title="Interested in contribute with this project?"><img
+  src="https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat-square&logo=github"/></a>
+<!-- Donate BTC badge -->
+<a
+  style="margin: 0.1em;"
+  href="https://www.blockchain.com/btc/address/18h417CACY3ksS1XPLWej7TE6hR9Eb6k34"
+  title="Want to give a little donation for author?"><img
+  src="https://img.shields.io/badge/donate-BTC-yellow.svg?logo=bitcoin&style=flat-square"/></a>
+</div>
+
+<div align="center">
+<!-- Docker layers badge -->
+<a
+  style="margin: 0.1em;"
+  href="https://microbadger.com/images/marcoonroad/nocoiner"
+  title="Verify the Docker image details here."><img
+  src="https://img.shields.io/microbadger/layers/marcoonroad/nocoiner/latest.svg?style=flat-square&logo=docker"/></a>
+<!-- Docker size badge -->
+<a
+  style="margin: 0.1em;"
+  href="https://microbadger.com/images/marcoonroad/nocoiner"
+  title="Verify the Docker image details here."><img
+  src="https://img.shields.io/microbadger/image-size/marcoonroad/nocoiner.svg?style=flat-square&logo=docker"/></a>
+<!-- Docker pulls badge -->
+<a
+  style="margin: 0.1em;"
+  href="https://hub.docker.com/r/marcoonroad/nocoiner"
+  title="Check the Docker project repository here."><img
+  src="https://img.shields.io/docker/pulls/marcoonroad/nocoiner.svg?style=flat-square&logo=docker"/></a>
+<!-- Docker stars badge -->
+<a
+  style="margin: 0.1em;"
+  href="https://hub.docker.com/r/marcoonroad/nocoiner"
+  title="Check the Docker project repository here."><img
+  src="https://img.shields.io/docker/stars/marcoonroad/nocoiner.svg?style=flat-square&logo=docker"/></a>
+</div>
+
 
 ### About
 
@@ -37,17 +103,29 @@ Commitment Schemes are one of the many [Secure Multiparty Computation][3]
 protocols/primitives, [Secret Sharing][4] is other famous cryptographic
 primitive in such field.
 
+
 ### Installation
+
+For the stable release, just type:
+
+```shell
+$ opam install nocoiner
+```
+
+To install/test the unstable version on this repository (assuming you're
+inside the project's root directory):
 
 ```shell
 $ make install # 'make uninstall' reverts the changes
 ```
+
 
 ### Testing
 
 ```shell
 $ make test
 ```
+
 
 ### Usage
 
@@ -82,6 +160,7 @@ $ cat secret-output.txt
 
 The complete API reference is available [here][7]. Coverage reports are
 generated too, please refer to the respective [page][8].
+
 
 ### Disclaimer
 

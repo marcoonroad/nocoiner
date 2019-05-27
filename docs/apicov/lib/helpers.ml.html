@@ -60,22 +60,22 @@ module Int = Core.Int
 module String = Core.String
 module Char = Core.Char
 
-let __nullchar = <span data-count="1">C</span>har.of_int_exn 0
+let __nullchar = <span data-count="15">C</span>har.of_int_exn 0
 
 let pad ~basis msg =
-  <span data-count="8">l</span>et encoded = <span data-count="8">E</span>ncoding.encode msg in
-  <span data-count="8">l</span>et length = <span data-count="8">S</span>tring.length encoded in
-  <span data-count="8">l</span>et remainder = <span data-count="8">I</span>nt.( % ) length basis in
-  <span data-count="8">l</span>et zerofill = <span data-count="8">S</span>tring.make (basis - remainder) __nullchar in
-  <span data-count="8">e</span>ncoded ^ zerofill
+  <span data-count="12">l</span>et encoded = <span data-count="12">E</span>ncoding.encode msg in
+  <span data-count="12">l</span>et length = <span data-count="12">S</span>tring.length encoded in
+  <span data-count="12">l</span>et remainder = <span data-count="12">I</span>nt.( % ) length basis in
+  <span data-count="12">l</span>et zerofill = <span data-count="12">S</span>tring.make (basis - remainder) __nullchar in
+  <span data-count="12">e</span>ncoded ^ zerofill
 
-let __nonzero char = <span data-count="11840">c</span>har != __nullchar
+let __nonzero char = <span data-count="11888">c</span>har != __nullchar
 
-let unpad msg = <span data-count="53">E</span>ncoding.decode @@ String.filter ~f:__nonzero msg
+let unpad msg = <span data-count="55">E</span>ncoding.decode @@ String.filter ~f:__nonzero msg
 </pre>
       </div>
     </div>
-    <div id="footer">Generated on 2019-05-17 11:31:45 by <a href="https://github.com/aantron/bisect_ppx">Bisect_ppx</a> 1.4.1</div>
+    <div id="footer">Generated on 2019-05-26 22:26:39 by <a href="https://github.com/aantron/bisect_ppx">Bisect_ppx</a> 1.4.1</div>
     <script src="../coverage.js"></script>
   </body>
 </html>
