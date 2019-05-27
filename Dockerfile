@@ -12,6 +12,19 @@ RUN eval $(opam env) && make test
 RUN eval $(opam env) && make binary
 
 FROM alpine
-ENTRYPOINT ["/usr/bin/nocoiner"]
+ARG BUILD_DATE
+ARG VCS_REF
+ARG VERSION
+LABEL \
+  org.label-schema.build-date=$BUILD_DATE \
+  org.label-schema.name="nocoiner" \
+  org.label-schema.description="A Commitment Scheme library for Coin Flipping/Tossing algorithms and sort." \
+  org.label-schema.url="https://nocoiner.marcoonroad.dev/" \
+  org.label-schema.vcs-ref=$VCS_REF \
+  org.label-schema.vcs-url="https://github.com/marcoonroad/nocoiner" \
+  org.label-schema.vendor="Marco Aurélio da Silva (marcoonroad)" \
+  org.label-schema.version=$VERSION \
+  org.label-schema.schema-version="1.0"
 COPY --from=0 /home/opam/project/nocoiner.exe /usr/bin/nocoiner
 RUN chmod a+rx /usr/bin/nocoiner
+ENTRYPOINT ["/usr/bin/nocoiner"]

@@ -126,5 +126,10 @@ image-prune:
 	@ docker system prune --force --volumes
 
 image:
-	@ docker build -t marcoonroad/nocoiner -f ./Dockerfile ./
+	@ docker build \
+		--build-arg VCS_REF=`git rev-parse --short HEAD` \
+		--build-arg BUILD_DATE=`date -u +"%Y-%m-%dT%H:%M:%SZ"` \
+		--build-arg VERSION=`cat VERSION` \
+		-t marcoonroad/nocoiner \
+		-f ./Dockerfile ./
 	@ docker cp `docker create marcoonroad/nocoiner`:/usr/bin/nocoiner ./nocoiner.exe

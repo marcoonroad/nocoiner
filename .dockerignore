@@ -18,3 +18,4 @@ _site
 ./docs/*
 ./TRASH/*
 ./node_modules/*
+.git/
