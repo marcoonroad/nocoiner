@@ -49,6 +49,20 @@ nocoiner
 </div>
 
 <div align="center">
+<!-- Docker build type badge -->
+<a
+  style="margin: 0.1em;"
+  href="https://hub.docker.com/r/marcoonroad/nocoiner/builds"
+  title="Check the Docker project build here."><img
+  alt="Docker Cloud Automated build"
+  src="https://img.shields.io/docker/cloud/automated/marcoonroad/nocoiner.svg?style=flat-square&logo=docker"></a>
+<!-- Docker build test badge -->
+<a
+  style="margin: 0.1em;"
+  href="https://hub.docker.com/r/marcoonroad/nocoiner/builds"
+  title="Check the Docker project build here."><img
+  alt="Docker Cloud Build Status"
+  src="https://img.shields.io/docker/cloud/build/marcoonroad/nocoiner.svg?style=flat-square&logo=docker"></a>
 <!-- Docker layers badge -->
 <a
   style="margin: 0.1em;"
