@@ -19,11 +19,10 @@ bug-reports: "https://github.com/marcoonroad/nocoiner/issues"
 dev-repo: "git+https://github.com/marcoonroad/nocoiner.git"
 
 build: [
-  ["dune" "build" "-p" name]
+  ["dune" "build" "-p" name "-j" jobs]
 ]
 
-run-test: ["dune" "runtest" "-p" name]
-
+run-test: ["dune" "runtest" "-p" name "-j" jobs]
 
 depends: [
   "ocaml" {>= "4.03.0"}
