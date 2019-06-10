@@ -5,6 +5,7 @@ RUN sudo apk add m4 linux-headers gmp-dev perl
 RUN opam depext ssl
 RUN opam install ssl alcotest
 COPY nocoiner.opam ./
+RUN opam update
 RUN opam install --deps-only .
 COPY ./ ./
 RUN sudo chmod a+rw -R ./
