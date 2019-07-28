@@ -12,6 +12,6 @@ let __random_bits bits =
 
 let key () = __random_bits 256
 
-let iv () = __random_bits 160
+let iv () = __random_bits 128
 
 let _ = Nocrypto_entropy_unix.initialize ()
