@@ -2,13 +2,22 @@ module Reasons = Exceptions
 module String = Core.String
 module List = Core.List
 
+let xor = Nocrypto.Uncommon.Cs.xor
+
 let __join ~on left right =
   Encoding.encode_blob left ^ on ^ Encoding.encode_blob right
 
+let __kdf ~key ~iv =
+  let payload = Hardening.kdf ~size:64l ~salt:iv key in
+  let key', rest = Cstruct.split payload 32 in
+  let iv1, iv2 = Cstruct.split rest 16 in
+  (key', xor iv1 iv2)
+
 let commit message =
-  let key = Entropy.key () in
-  let iv = Entropy.iv () in
+  let key' = Entropy.key () in
+  let iv' = Entropy.iv () in
   let fingerprint = Fingerprint.id () in
+  let key, iv = __kdf ~key:key' ~iv:iv' in
   let payload = Encoding.encode message ^ ":" ^ fingerprint in
   let cipher, tag = Encryption.encrypt ~key ~iv ~message:payload in
   let commitment = __join cipher ~on:"@" tag in

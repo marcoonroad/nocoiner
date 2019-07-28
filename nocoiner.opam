@@ -30,6 +30,7 @@ depends: [
   "cmdliner" {>= "1.0.0"}
   "alcotest" {with-test}
   "nocrypto" {>= "0.5.4-1"}
+  "scrypt-kdf" {>= "1.0.0"}
   "digestif" {>= "0.7.0"}
   "core" {>= "v0.9.1"}
   "bisect_ppx" {>= "1.4.1"}
