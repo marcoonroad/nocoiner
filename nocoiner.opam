@@ -1,16 +1,14 @@
 opam-version: "2.0"
 name: "nocoiner"
-version: "0.0.1"
+version: "1.0.0"
 synopsis: "A Commitment Scheme library for Coin Flipping/Tossing algorithms and sort"
 description: """
 This project implements Commitment Schemes using the
-Galois/Counter Mode (GCM) of secret-key encryption. Because this AES
-encryption mode provides both Message Confidentiality and Integrity, it fits
+Encrypt-then-MAC approach of authenticated encryption. Because this kind of
+encryption algorithm provides both Message Confidentiality and Integrity, it fits
 perfectly the Hiding and Binding properties of Commitment Schemes.
 Confidentiality protects the message against passive attacks while integrity
-protects it from active attacks. GCM, so, works as an
-Authenticated Encryption where it roughly works as an encryption algorithm
-with MAC signatures on cipher data.
+protects it from active attacks.
 """
 maintainer: "Marco Aurélio da Silva <marcoonroad@gmail.com>"
 authors: ["Marco Aurélio da Silva <marcoonroad@gmail.com>"]
