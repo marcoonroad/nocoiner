@@ -23,16 +23,27 @@
 <a id="L3"></a><span > </span>
 <a id="L4"></a><span > </span>
 <a id="L5"></a><span class="visited"> </span>
-<a id="L6"></a><span class="visited"> </span>
+<a id="L6"></a><span > </span>
 <a id="L7"></a><span class="visited"> </span>
 <a id="L8"></a><span class="visited"> </span>
-<a id="L9"></a><span > </span>
+<a id="L9"></a><span class="visited"> </span>
 <a id="L10"></a><span > </span>
-<a id="L11"></a><span class="visited"> </span>
+<a id="L11"></a><span > </span>
 <a id="L12"></a><span class="visited"> </span>
 <a id="L13"></a><span class="visited"> </span>
 <a id="L14"></a><span class="visited"> </span>
-<a id="L15"></a><span class="visited"> </span>
+<a id="L15"></a><span > </span>
+<a id="L16"></a><span class="visited"> </span>
+<a id="L17"></a><span > </span>
+<a id="L18"></a><span > </span>
+<a id="L19"></a><span > </span>
+<a id="L20"></a><span > </span>
+<a id="L21"></a><span > </span>
+<a id="L22"></a><span > </span>
+<a id="L23"></a><span > </span>
+<a id="L24"></a><span > </span>
+<a id="L25"></a><span > </span>
+<a id="L26"></a><span > </span>
 </pre>
       </div>
       <div id="text-layer">
@@ -52,27 +63,49 @@
 <a href="#L13">13</a>
 <a href="#L14">14</a>
 <a href="#L15">15</a>
+<a href="#L16">16</a>
+<a href="#L17">17</a>
+<a href="#L18">18</a>
+<a href="#L19">19</a>
+<a href="#L20">20</a>
+<a href="#L21">21</a>
+<a href="#L22">22</a>
+<a href="#L23">23</a>
+<a href="#L24">24</a>
+<a href="#L25">25</a>
+<a href="#L26">26</a>
 </pre>
         <pre id="code">
 module String = Core.String
-module AES = Nocrypto.Cipher_block.AES.GCM
+module AES = Nocrypto.Cipher_block.AES.CBC
 
-let encrypt ~key ~iv ~message:msg =
-  <span data-count="12">l</span>et key = <span data-count="12">A</span>ES.of_secret key in
-  <span data-count="12">l</span>et plaintext = <span data-count="12">H</span>elpers.pad ~basis:16 msg in
-  <span data-count="12">l</span>et result = <span data-count="12">A</span>ES.encrypt ~iv ~key @@ Cstruct.of_string plaintext in
-  <span data-count="12">(</span>result.AES.message, result.AES.tag)
+let hash data =
+  Cstruct.of_hex @@ Ha<span data-count="12">s</span>hing.hash<span data-count="12"> </span>@@ Cstruct.to_string d<span data-count="12">a</span>ta
 
-let decrypt ~reason ~key ~iv ~cipher ~tag =
-  <span data-count="64">l</span>et key = <span data-count="64">A</span>ES.of_secret key in
-  <span data-count="64">l</span>et result = <span data-count="64">A</span>ES.decrypt ~iv ~key cipher in
-  <span data-count="64">i</span>f Cstruct.equal tag result.AES.tag then
-    <span data-count="55">H</span>elpers.unpad @@ Cstruct.to_string result.AES.message
-  else <span data-count="9">r</span>aise reason
+let mac ~ke<span data-count="71">y</span> data =
+  let key', data' = Cs<span data-count="71">t</span>ruct.to_stri<span data-count="71">n</span>g key, Cstruct.to_string data in
+  Cstruct.of_hex @@ Has<span data-count="71">h</span>ing.mac ~key:key' data'
+
+let encrypt ~key:key' ~iv ~message:msg =
+  let key = AES.o<span data-count="13">f</span>_secret k<span data-count="13">e</span>y' in
+  let plaintext <span data-count="13">=</span> Helpers.pad<span data-count="13"> </span>~basis:16 msg in
+  let ciphertex<span data-count="13">t</span> = AES.encrypt ~iv ~key @@ Cstruct.of_string<span data-count="10"> </span>plaintext in
+  let secret = hash key' in
+  let tag = mac ~ke<span data-count="11">y</span>:secret ciphertext in
+  (ciphertext, tag)
+
+let decrypt ~reason ~key:key' ~iv ~cipher ~tag =
+  let secret = hash key' in
+  let tag' = mac ~key:secret cipher in
+  if Cstruct.equal tag tag' then
+    let key = AES.of_secret key' in
+    let plaintext = AES.decrypt ~iv ~key cipher in
+    Helpers.unpad @@ Cstruct.to_string plaintext
+  else raise reason
 </pre>
       </div>
     </div>
-    <div id="footer">Generated on 2019-05-26 22:26:39 by <a href="https://github.com/aantron/bisect_ppx">Bisect_ppx</a> 1.4.1</div>
+    <div id="footer">Generated on 2019-07-28 21:36:23 by <a href="https://github.com/aantron/bisect_ppx">Bisect_ppx</a> 1.4.1</div>
     <script src="../coverage.js"></script>
   </body>
 </html>

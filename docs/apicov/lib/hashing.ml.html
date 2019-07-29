@@ -8,7 +8,7 @@
     <div id="header">
       <h1>
         <a href="../index.html">
-          <span class="dirname">lib/</span>fingerprint.ml
+          <span class="dirname">lib/</span>hashing.ml
         </a>
       </h1>
       <h2>100.00%</h2>
@@ -18,17 +18,16 @@
     <div id="report">
       <div id="lines-layer">
         <pre>
-<a id="L1"></a><span class="visited"> </span>
+<a id="L1"></a><span > </span>
 <a id="L2"></a><span > </span>
 <a id="L3"></a><span > </span>
 <a id="L4"></a><span class="visited"> </span>
-<a id="L5"></a><span class="visited"> </span>
-<a id="L6"></a><span class="visited"> </span>
+<a id="L5"></a><span > </span>
+<a id="L6"></a><span > </span>
 <a id="L7"></a><span class="visited"> </span>
-<a id="L8"></a><span class="visited"> </span>
+<a id="L8"></a><span > </span>
 <a id="L9"></a><span > </span>
-<a id="L10"></a><span > </span>
-<a id="L11"></a><span class="visited"> </span>
+<a id="L10"></a><span class="visited"> </span>
 </pre>
       </div>
       <div id="text-layer">
@@ -43,20 +42,18 @@
 <a href="#L8"> 8</a>
 <a href="#L9"> 9</a>
 <a href="#L10">10</a>
-<a href="#L11">11</a>
 </pre>
         <pre id="code">
-let hash data = <span data-count="32">C</span>struct.of_hex @@ Hashing.hash data
+module Blake2B = Digestif.BLAKE2B
 
-let id ( ) =
-  <span data-count="8">l</span>et timestamp = <span data-count="8">h</span>ash @@ string_of_float @@ Unix.gettimeofday ( ) in
-  <span data-count="8">l</span>et pid = <span data-count="8">h</span>ash @@ string_of_int @@ Unix.getpid ( ) in
-  <span data-count="8">l</span>et hostname = <span data-count="8">h</span>ash @@ Unix.gethostname ( ) in
-  <span data-count="8">l</span>et cwd = <span data-count="8">h</span>ash @@ Unix.getcwd ( ) in
-  <span data-count="8">l</span>et context = <span data-count="8">C</span>struct.to_string @@ Cstruct.concat [
-    timestamp; pid; hostname; cwd
-  ] in
-  <span data-count="8">E</span>ncoding.encode @@ Hashing.raw_hash context
+let hash data =
+  <span data-count="99">B</span>lake2B.to_hex @@ Blake2B.digest_string data
+
+let raw_hash data =
+  <span data-count="8">B</span>lake2B.to_raw_string @@ Blake2B.digest_string data
+
+let mac ~key data =
+  <span data-count="67">B</span>lake2B.to_hex @@ Blake2B.Keyed.mac_string ~key data
 </pre>
       </div>
     </div>
