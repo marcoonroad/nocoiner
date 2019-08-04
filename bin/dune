@@ -6,5 +6,6 @@
  ; (flags :standard -ccopt -static)
  ; (ocamlopt_flags :standard -ccopt -static)
  ; (link_flags :standard -cclib -static)
- (modes (best exe))
+ (modes
+  (best exe))
  (modules program helpers commands))
