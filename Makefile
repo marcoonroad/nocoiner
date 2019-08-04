@@ -102,6 +102,7 @@ dev-deps:
 		--yes
 
 lint-format:
+	@ opam install ocamlformat --yes
 	@ dune build @fmt
 
 format:
