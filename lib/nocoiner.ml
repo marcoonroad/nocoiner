@@ -2,8 +2,7 @@ module Reasons = Exceptions
 module String = Core.String
 module List = Core.List
 
-let __concat_on separator left right =
-  left ^ separator ^ right
+let __concat_on separator left right = left ^ separator ^ right
 
 let __join ~on list =
   list
@@ -16,7 +15,7 @@ let commit payload =
   let metadata = Cstruct.of_string @@ Fingerprint.id () in
   let message = Cstruct.of_string @@ Encoding.encode payload in
   let cipher, tag = Encryption.encrypt ~key ~iv ~metadata ~message in
-  let commitment = __join ~on:"@" [ metadata; iv; cipher; tag ] in
+  let commitment = __join ~on:"@" [metadata; iv; cipher; tag] in
   let opening = Encoding.encode_blob key in
   (commitment, opening)
 
@@ -37,6 +36,10 @@ let __split ~reason ~on data =
 let reveal ~commitment ~opening =
   let open Reasons in
   let key = __decode ~reason:InvalidOpening opening in
-  let metadata, iv, cipher, tag = __split ~reason:InvalidCommitment ~on:'@' commitment in
-  let payload = Encryption.decrypt ~reason:BindingFailure ~key ~iv ~metadata ~cipher ~tag in
+  let metadata, iv, cipher, tag =
+    __split ~reason:InvalidCommitment ~on:'@' commitment
+  in
+  let payload =
+    Encryption.decrypt ~reason:BindingFailure ~key ~iv ~metadata ~cipher ~tag
+  in
   Encoding.decode @@ Cstruct.to_string payload
