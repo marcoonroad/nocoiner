@@ -2,26 +2,22 @@ module Reasons = Exceptions
 module String = Core.String
 module List = Core.List
 
-let xor = Nocrypto.Uncommon.Cs.xor
+let __concat_on separator left right =
+  left ^ separator ^ right
 
-let __join ~on left right =
-  Encoding.encode_blob left ^ on ^ Encoding.encode_blob right
+let __join ~on list =
+  list
+  |> List.map ~f:Encoding.encode_blob
+  |> List.reduce_exn ~f:(__concat_on on)
 
-let __kdf ~key ~iv =
-  let payload = Hardening.kdf ~size:64l ~salt:iv key in
-  let key', rest = Cstruct.split payload 32 in
-  let iv1, iv2 = Cstruct.split rest 16 in
-  (key', xor iv1 iv2)
-
-let commit message =
-  let key' = Entropy.key () in
-  let iv' = Entropy.iv () in
-  let fingerprint = Fingerprint.id () in
-  let key, iv = __kdf ~key:key' ~iv:iv' in
-  let payload = Encoding.encode message ^ ":" ^ fingerprint in
-  let cipher, tag = Encryption.encrypt ~key ~iv ~message:payload in
-  let commitment = __join cipher ~on:"@" tag in
-  let opening = __join key ~on:"." iv in
+let commit payload =
+  let key = Entropy.key () in
+  let iv = Entropy.iv () in
+  let metadata = Cstruct.of_string @@ Fingerprint.id () in
+  let message = Cstruct.of_string @@ Encoding.encode payload in
+  let cipher, tag = Encryption.encrypt ~key ~iv ~metadata ~message in
+  let commitment = __join ~on:"@" [ metadata; iv; cipher; tag ] in
+  let opening = Encoding.encode_blob key in
   (commitment, opening)
 
 let __decode ~reason data =
@@ -29,15 +25,18 @@ let __decode ~reason data =
 
 let __split ~reason ~on data =
   match String.split data ~on with
-  | [left; right] ->
-      (__decode ~reason left, __decode ~reason right)
+  | [metadata; iv; cipher; tag] ->
+      let metadata' = __decode ~reason metadata in
+      let iv' = __decode ~reason iv in
+      let cipher' = __decode ~reason cipher in
+      let tag' = __decode ~reason tag in
+      (metadata', iv', cipher', tag')
   | _ ->
       raise reason
 
 let reveal ~commitment ~opening =
   let open Reasons in
-  let key, iv = __split ~reason:InvalidOpening ~on:'.' opening in
-  let cipher, tag = __split ~reason:InvalidCommitment ~on:'@' commitment in
-  let payload = Encryption.decrypt ~reason:BindingFailure ~key ~iv ~cipher ~tag in
-  let parts = String.split ~on:':' payload in
-  Encoding.decode @@ List.nth_exn parts 0 (* discards fingerprint at index 1 *)
+  let key = __decode ~reason:InvalidOpening opening in
+  let metadata, iv, cipher, tag = __split ~reason:InvalidCommitment ~on:'@' commitment in
+  let payload = Encryption.decrypt ~reason:BindingFailure ~key ~iv ~metadata ~cipher ~tag in
+  Encoding.decode @@ Cstruct.to_string payload
