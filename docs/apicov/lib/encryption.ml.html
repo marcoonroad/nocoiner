@@ -23,17 +23,17 @@
 <a id="L3"></a><span > </span>
 <a id="L4"></a><span > </span>
 <a id="L5"></a><span class="visited"> </span>
-<a id="L6"></a><span > </span>
+<a id="L6"></a><span class="visited"> </span>
 <a id="L7"></a><span class="visited"> </span>
 <a id="L8"></a><span class="visited"> </span>
-<a id="L9"></a><span class="visited"> </span>
+<a id="L9"></a><span > </span>
 <a id="L10"></a><span > </span>
-<a id="L11"></a><span > </span>
-<a id="L12"></a><span class="visited"> </span>
-<a id="L13"></a><span class="visited"> </span>
+<a id="L11"></a><span class="visited"> </span>
+<a id="L12"></a><span > </span>
+<a id="L13"></a><span > </span>
 <a id="L14"></a><span class="visited"> </span>
-<a id="L15"></a><span > </span>
-<a id="L16"></a><span class="visited"> </span>
+<a id="L15"></a><span class="visited"> </span>
+<a id="L16"></a><span > </span>
 <a id="L17"></a><span > </span>
 <a id="L18"></a><span > </span>
 <a id="L19"></a><span > </span>
@@ -44,6 +44,18 @@
 <a id="L24"></a><span > </span>
 <a id="L25"></a><span > </span>
 <a id="L26"></a><span > </span>
+<a id="L27"></a><span > </span>
+<a id="L28"></a><span > </span>
+<a id="L29"></a><span > </span>
+<a id="L30"></a><span > </span>
+<a id="L31"></a><span > </span>
+<a id="L32"></a><span > </span>
+<a id="L33"></a><span > </span>
+<a id="L34"></a><span > </span>
+<a id="L35"></a><span > </span>
+<a id="L36"></a><span > </span>
+<a id="L37"></a><span > </span>
+<a id="L38"></a><span > </span>
 </pre>
       </div>
       <div id="text-layer">
@@ -74,38 +86,62 @@
 <a href="#L24">24</a>
 <a href="#L25">25</a>
 <a href="#L26">26</a>
+<a href="#L27">27</a>
+<a href="#L28">28</a>
+<a href="#L29">29</a>
+<a href="#L30">30</a>
+<a href="#L31">31</a>
+<a href="#L32">32</a>
+<a href="#L33">33</a>
+<a href="#L34">34</a>
+<a href="#L35">35</a>
+<a href="#L36">36</a>
+<a href="#L37">37</a>
+<a href="#L38">38</a>
 </pre>
         <pre id="code">
 module String = Core.String
 module AES = Nocrypto.Cipher_block.AES.CBC
 
-let hash data =
-  Cstruct.of_hex @@ Ha<span data-count="12">s</span>hing.hash<span data-count="12"> </span>@@ Cstruct.to_string d<span data-count="12">a</span>ta
+let __kdf key =
+  let aes_salt = Entro<span data-count="71">p</span>y.min_bit<span data-count="71">s</span> (32 * 8) in
+  let mac<span data-count="71">_</span>salt = Entropy.<span data-count="71">m</span>ax_bits (32 * 8) in
+  let aes_<span data-count="71">k</span>ey = Hardeni<span data-count="71">n</span>g.kdf ~size:32l ~salt:aes_salt key in
+  let mac_key = Ha<span data-count="71">r</span>dening.kdf ~size:32l ~salt:mac_salt key in
+  (aes_key, mac_key)
 
-let mac ~ke<span data-count="71">y</span> data =
-  let key', data' = Cs<span data-count="71">t</span>ruct.to_stri<span data-count="71">n</span>g key, Cstruct.to_string data in
-  Cstruct.of_hex @@ Has<span data-count="71">h</span>ing.mac ~key:key' data'
+let hash data = Cs<span data-count="13">t</span>ruct.of_h<span data-count="72">e</span>x @@ Hashing.hash @@ C<span data-count="72">s</span>truct.to_str<span data-count="72">i</span>ng data
 
-let encrypt ~key:key' ~iv ~message:msg =
-  let key = AES.o<span data-count="13">f</span>_secret k<span data-count="13">e</span>y' in
-  let plaintext <span data-count="13">=</span> Helpers.pad<span data-count="13"> </span>~basis:16 msg in
-  let ciphertex<span data-count="13">t</span> = AES.encrypt ~iv ~key @@ Cstruct.of_string<span data-count="10"> </span>plaintext in
-  let secret = hash key' in
-  let tag = mac ~ke<span data-count="11">y</span>:secret ciphertext in
+let mac ~key data =
+  l<span data-count="72">e</span>t key', data' = (Cstruct.to_string key, Cstr<span data-count="69">u</span>ct.to_string data) in
+  Cstruct.of_hex @@ Hashing.mac ~key:k<span data-count="70">e</span>y' data'
+
+let encrypt ~key ~iv ~metadata ~message:msg =
+  let aes_key, mac_key = __kdf key in
+  let aes_key' = AES.of_secret aes_key in
+  let plaintext = Helpers.pad ~basis:16 @@ Cstruct.to_string msg in
+  let ciphertext =
+    AES.encrypt ~iv ~key:aes_key' @@ Cstruct.of_string plaintext
+  in
+  let secret = hash mac_key in
+  let payload = Cstruct.concat [metadata; iv; ciphertext] in
+  let tag = mac ~key:secret payload in
   (ciphertext, tag)
 
-let decrypt ~reason ~key:key' ~iv ~cipher ~tag =
-  let secret = hash key' in
-  let tag' = mac ~key:secret cipher in
+let decrypt ~reason ~key ~iv ~metadata ~cipher ~tag =
+  let aes_key, mac_key = __kdf key in
+  let secret = hash mac_key in
+  let payload = Cstruct.concat [metadata; iv; cipher] in
+  let tag' = mac ~key:secret payload in
   if Cstruct.equal tag tag' then
-    let key = AES.of_secret key' in
-    let plaintext = AES.decrypt ~iv ~key cipher in
-    Helpers.unpad @@ Cstruct.to_string plaintext
+    let aes_key' = AES.of_secret aes_key in
+    let plaintext = AES.decrypt ~iv ~key:aes_key' cipher in
+    Cstruct.of_string @@ Helpers.unpad @@ Cstruct.to_string plaintext
   else raise reason
 </pre>
       </div>
     </div>
-    <div id="footer">Generated on 2019-07-28 21:36:23 by <a href="https://github.com/aantron/bisect_ppx">Bisect_ppx</a> 1.4.1</div>
+    <div id="footer">Generated on 2019-08-04 17:11:42 by <a href="https://github.com/aantron/bisect_ppx">Bisect_ppx</a> 1.4.1</div>
     <script src="../coverage.js"></script>
   </body>
 </html>

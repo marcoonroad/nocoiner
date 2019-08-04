@@ -25,24 +25,24 @@
 <a id="L5"></a><span class="visited"> </span>
 <a id="L6"></a><span > </span>
 <a id="L7"></a><span > </span>
-<a id="L8"></a><span class="visited"> </span>
-<a id="L9"></a><span > </span>
+<a id="L8"></a><span > </span>
+<a id="L9"></a><span class="visited"> </span>
 <a id="L10"></a><span class="visited"> </span>
-<a id="L11"></a><span class="visited"> </span>
+<a id="L11"></a><span > </span>
 <a id="L12"></a><span class="visited"> </span>
-<a id="L13"></a><span class="visited"> </span>
+<a id="L13"></a><span > </span>
 <a id="L14"></a><span class="visited"> </span>
-<a id="L15"></a><span > </span>
+<a id="L15"></a><span class="visited"> </span>
 <a id="L16"></a><span class="visited"> </span>
-<a id="L17"></a><span > </span>
+<a id="L17"></a><span class="visited"> </span>
 <a id="L18"></a><span class="visited"> </span>
-<a id="L19"></a><span class="visited"> </span>
+<a id="L19"></a><span > </span>
 <a id="L20"></a><span class="visited"> </span>
-<a id="L21"></a><span class="visited"> </span>
-<a id="L22"></a><span class="visited"> </span>
+<a id="L21"></a><span > </span>
+<a id="L22"></a><span > </span>
 <a id="L23"></a><span class="visited"> </span>
-<a id="L24"></a><span class="visited"> </span>
-<a id="L25"></a><span > </span>
+<a id="L24"></a><span > </span>
+<a id="L25"></a><span class="visited"> </span>
 <a id="L26"></a><span class="visited"> </span>
 <a id="L27"></a><span class="visited"> </span>
 <a id="L28"></a><span class="visited"> </span>
@@ -61,6 +61,8 @@
 <a id="L41"></a><span > </span>
 <a id="L42"></a><span > </span>
 <a id="L43"></a><span > </span>
+<a id="L44"></a><span > </span>
+<a id="L45"></a><span > </span>
 </pre>
       </div>
       <div id="text-layer">
@@ -108,55 +110,59 @@
 <a href="#L41">41</a>
 <a href="#L42">42</a>
 <a href="#L43">43</a>
+<a href="#L44">44</a>
+<a href="#L45">45</a>
 </pre>
         <pre id="code">
 module Reasons = Exceptions
 module String = Core.String
 module List = Core.List
 
-let xor = Nocrypto.Uncommon.Cs<span data-count="9">.</span>xor
+let __concat_on separator left<span data-count="32"> </span>right = left ^ separator ^ right
 
-let __join ~on left right =
-  Encoding.encode_blob left ^ on ^ Encoding.encode<span data-count="12">_</span>blob righ<span data-count="12">t</span>
+let __join ~on list =
+  list
+  |&gt; List.map ~f:Enc<span data-count="12">o</span>ding.enco<span data-count="12">d</span>e_blob
+  |&gt; List.re<span data-count="12">d</span>uce_exn <span data-count="12">~</span>f:(__concat_on on)
 
-let __kdf ~key ~i<span data-count="12">v</span> =
-  let<span data-count="12"> </span>payload = Hardenin<span data-count="12">g</span>.kdf ~size:64l ~s<span data-count="12">a</span>lt:iv key in
-  let key', rest = Cstruct.s<span data-count="12">p</span>lit payload 32 i<span data-count="12">n</span>
-  let iv1, iv2 = Cstruct.spli<span data-count="12">t</span> rest 16 in
- <span data-count="20"> </span>(key', xor iv1 iv2)
+let commit paylo<span data-count="12">a</span>d =
+  let key = Entropy.key () in
+  let i<span data-count="12">v</span> = Entropy.iv ()<span data-count="12"> </span>in
+  let metadata = Cstruct.of<span data-count="12">_</span>string @@ Fin<span data-count="12">g</span>erprint.id () in
+  let mes<span data-count="12">s</span>age = Cstruct.of_string @@ Encoding.encode payload i<span data-count="28">n</span>
+  let cipher, tag = Encryption.encry<span data-count="8">p</span>t ~key ~iv ~metadata ~message in
+  let commitment =<span data-count="18"> </span>__join ~on:"@" [metadata; iv; cipher<span data-count="18">;</span> tag] in
+  let opening = Encoding.encode_blob key in
+  (commitment, openin<span data-count="8">g</span>)
 
-let c<span data-count="12">o</span>mmit message =
-  let key' = Entropy.key () in
-  let <span data-count="28">i</span>v' = Entropy.iv () in
-  let fingerpri<span data-count="8">n</span>t = Fingerprint.id () in
-  let key, iv = __kdf ~key<span data-count="18">:</span>key' ~iv:iv' in
-  let payload = Enco<span data-count="18">d</span>ing.encode message ^ ":" ^ fingerprint in
-  let cipher, tag = Encryption.e<span data-count="8">n</span>crypt ~key ~iv ~message:payload in
-  let commitment = __join<span data-count="13"> </span>cipher ~on:"@" tag in
-  let opening<span data-count="13"> </span>= __join key ~on:"." iv in
-  (commitment, opening)
+let __decode ~reason data =
+  try Encoding.decode_as_blob<span data-count="64"> </span>data with _ -&gt; raise reason
 
-let __decode ~rea<span data-count="13">s</span>on data =
-  try Encoding.decode_as_blob data with _ -&gt; ra<span data-count="13">i</span>se reason
-
-let __split ~reason ~on data =
-  match String.split data ~on with
-  | [left; right] -&gt;
-      (__decode ~reason left, __decode ~reason right)
+let __<span data-count="7">s</span>plit ~reason ~on data =
+  match String.split data ~<span data-count="304">o</span>n with
+  | [metad<span data-count="13">a</span>ta; iv; cipher; tag] -&gt;
+      let metadata' = __decode ~r<span data-count="13">e</span>ason metadata in
+      let iv' = __decode ~reason iv in
+      let cipher' = __decode ~reason cipher in
+      let tag' = __decode ~reason tag in
+      (metadata', iv', cipher', tag')
   | _ -&gt;
       raise reason
 
 let reveal ~commitment ~opening =
   let open Reasons in
-  let key, iv = __split ~reason:InvalidOpening ~on:'.' opening in
-  let cipher, tag = __split ~reason:InvalidCommitment ~on:'@' commitment in
-  let payload = Encryption.decrypt ~reason:BindingFailure ~key ~iv ~cipher ~tag in
-  let parts = String.split ~on:':' payload in
-  Encoding.decode @@ List.nth_exn parts 0 (* discards fingerprint at index 1 *)
+  let key = __decode ~reason:InvalidOpening opening in
+  let metadata, iv, cipher, tag =
+    __split ~reason:InvalidCommitment ~on:'@' commitment
+  in
+  let payload =
+    Encryption.decrypt ~reason:BindingFailure ~key ~iv ~metadata ~cipher ~tag
+  in
+  Encoding.decode @@ Cstruct.to_string payload
 </pre>
       </div>
     </div>
-    <div id="footer">Generated on 2019-07-28 21:36:23 by <a href="https://github.com/aantron/bisect_ppx">Bisect_ppx</a> 1.4.1</div>
+    <div id="footer">Generated on 2019-08-04 17:11:42 by <a href="https://github.com/aantron/bisect_ppx">Bisect_ppx</a> 1.4.1</div>
     <script src="../coverage.js"></script>
   </body>
 </html>

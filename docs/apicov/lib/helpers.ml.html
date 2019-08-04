@@ -69,13 +69,13 @@ let pad ~basis msg =
   <span data-count="12">l</span>et zerofill = <span data-count="12">S</span>tring.make (basis - remainder) __nullchar in
   <span data-count="12">e</span>ncoded ^ zerofill
 
-let __nonzero char = <span data-count="11888">c</span>har != __nullchar
+let __nonzero char = <span data-count="5952">c</span>har != __nullchar
 
 let unpad msg = <span data-count="55">E</span>ncoding.decode @@ String.filter ~f:__nonzero msg
 </pre>
       </div>
     </div>
-    <div id="footer">Generated on 2019-07-28 21:36:23 by <a href="https://github.com/aantron/bisect_ppx">Bisect_ppx</a> 1.4.1</div>
+    <div id="footer">Generated on 2019-08-04 17:11:42 by <a href="https://github.com/aantron/bisect_ppx">Bisect_ppx</a> 1.4.1</div>
     <script src="../coverage.js"></script>
   </body>
 </html>
