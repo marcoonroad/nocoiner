@@ -8,6 +8,7 @@ default: build
 
 test: build
 	@ opam lint
+	@ make lint-format
 	@ dune build @test/spec/runtest -f --no-buffer -j 1
 
 build:
@@ -122,14 +123,23 @@ binary: clear
 	@ cp `dune exec --profile deploy -- which nocoiner` ./nocoiner.exe
 	@ chmod a+rx ./nocoiner.exe
 
-image-prune:
+docker-system-prune:
 	@ docker system prune --force --volumes
 
-image:
+docker-build:
 	@ docker build \
 		--build-arg VCS_REF=`git rev-parse --short HEAD` \
 		--build-arg BUILD_DATE=`date -u +"%Y-%m-%dT%H:%M:%SZ"` \
 		--build-arg VERSION=`cat VERSION` \
 		-t marcoonroad/nocoiner \
 		-f ./Dockerfile ./
+
+docker-extract:
 	@ docker cp `docker create marcoonroad/nocoiner`:/usr/bin/nocoiner ./nocoiner.exe
+
+docker-pull:
+	@ docker pull marcoonroad/nocoiner
+
+docker-local-binary: docker-build docker-extract
+
+docker-remote-binary: docker-pull docker-extract

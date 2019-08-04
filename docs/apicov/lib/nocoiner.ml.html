@@ -22,36 +22,47 @@
 <a id="L2"></a><span > </span>
 <a id="L3"></a><span > </span>
 <a id="L4"></a><span > </span>
-<a id="L5"></a><span > </span>
-<a id="L6"></a><span class="visited"> </span>
+<a id="L5"></a><span class="visited"> </span>
+<a id="L6"></a><span > </span>
 <a id="L7"></a><span > </span>
 <a id="L8"></a><span > </span>
 <a id="L9"></a><span class="visited"> </span>
 <a id="L10"></a><span class="visited"> </span>
-<a id="L11"></a><span class="visited"> </span>
+<a id="L11"></a><span > </span>
 <a id="L12"></a><span class="visited"> </span>
-<a id="L13"></a><span class="visited"> </span>
+<a id="L13"></a><span > </span>
 <a id="L14"></a><span class="visited"> </span>
 <a id="L15"></a><span class="visited"> </span>
-<a id="L16"></a><span > </span>
-<a id="L17"></a><span > </span>
+<a id="L16"></a><span class="visited"> </span>
+<a id="L17"></a><span class="visited"> </span>
 <a id="L18"></a><span class="visited"> </span>
-<a id="L19"></a><span class="visited"> </span>
-<a id="L20"></a><span > </span>
+<a id="L19"></a><span > </span>
+<a id="L20"></a><span class="visited"> </span>
 <a id="L21"></a><span > </span>
-<a id="L22"></a><span class="visited"> </span>
-<a id="L23"></a><span > </span>
-<a id="L24"></a><span class="visited"> </span>
-<a id="L25"></a><span > </span>
-<a id="L26"></a><span > </span>
-<a id="L27"></a><span > </span>
+<a id="L22"></a><span > </span>
+<a id="L23"></a><span class="visited"> </span>
+<a id="L24"></a><span > </span>
+<a id="L25"></a><span class="visited"> </span>
+<a id="L26"></a><span class="visited"> </span>
+<a id="L27"></a><span class="visited"> </span>
 <a id="L28"></a><span class="visited"> </span>
 <a id="L29"></a><span > </span>
-<a id="L30"></a><span class="visited"> </span>
+<a id="L30"></a><span > </span>
 <a id="L31"></a><span > </span>
 <a id="L32"></a><span > </span>
 <a id="L33"></a><span > </span>
 <a id="L34"></a><span > </span>
+<a id="L35"></a><span > </span>
+<a id="L36"></a><span > </span>
+<a id="L37"></a><span > </span>
+<a id="L38"></a><span > </span>
+<a id="L39"></a><span > </span>
+<a id="L40"></a><span > </span>
+<a id="L41"></a><span > </span>
+<a id="L42"></a><span > </span>
+<a id="L43"></a><span > </span>
+<a id="L44"></a><span > </span>
+<a id="L45"></a><span > </span>
 </pre>
       </div>
       <div id="text-layer">
@@ -90,46 +101,68 @@
 <a href="#L32">32</a>
 <a href="#L33">33</a>
 <a href="#L34">34</a>
+<a href="#L35">35</a>
+<a href="#L36">36</a>
+<a href="#L37">37</a>
+<a href="#L38">38</a>
+<a href="#L39">39</a>
+<a href="#L40">40</a>
+<a href="#L41">41</a>
+<a href="#L42">42</a>
+<a href="#L43">43</a>
+<a href="#L44">44</a>
+<a href="#L45">45</a>
 </pre>
         <pre id="code">
 module Reasons = Exceptions
 module String = Core.String
 module List = Core.List
 
-let __join ~on left right =
-  <span data-count="24">E</span>ncoding.encode_blob left ^ on ^ Encoding.encode_blob right
+let __concat_on separator left<span data-count="32"> </span>right = left ^ separator ^ right
 
-let commit message =
-  <span data-count="12">l</span>et key = <span data-count="12">E</span>ntropy.key () in
-  <span data-count="12">l</span>et iv = <span data-count="12">E</span>ntropy.iv () in
-  <span data-count="12">l</span>et fingerprint = <span data-count="12">F</span>ingerprint.id () in
-  let payload = Encod<span data-count="12">i</span>ng.encode messag<span data-count="12">e</span> ^ ":" ^ fingerprint in
-  let <span data-count="12">c</span>ipher, tag = <span data-count="12">E</span>ncryption.encrypt ~key ~iv<span data-count="12"> </span>~message:payload in
-  let commitment = __join cipher<span data-count="28"> </span>~on:"@" tag in
-  let opening = __join<span data-count="8"> </span>key ~on:"." iv in
-  (commitment, opening)
+let __join ~on list =
+  list
+  |&gt; List.map ~f:Enc<span data-count="12">o</span>ding.enco<span data-count="12">d</span>e_blob
+  |&gt; List.re<span data-count="12">d</span>uce_exn <span data-count="12">~</span>f:(__concat_on on)
 
-let __de<span data-count="11">c</span>ode ~reason data =
-  try Encoding.de<span data-count="18">c</span>ode_as_blob data with _ -&gt; raise reason
+let commit paylo<span data-count="12">a</span>d =
+  let key = Entropy.key () in
+  let i<span data-count="12">v</span> = Entropy.iv ()<span data-count="12"> </span>in
+  let metadata = Cstruct.of<span data-count="12">_</span>string @@ Fin<span data-count="12">g</span>erprint.id () in
+  let mes<span data-count="12">s</span>age = Cstruct.of_string @@ Encoding.encode payload i<span data-count="28">n</span>
+  let cipher, tag = Encryption.encry<span data-count="8">p</span>t ~key ~iv ~metadata ~message in
+  let commitment =<span data-count="18"> </span>__join ~on:"@" [metadata; iv; cipher<span data-count="18">;</span> tag] in
+  let opening = Encoding.encode_blob key in
+  (commitment, openin<span data-count="8">g</span>)
 
-let __split ~reason ~on data =
-  <span data-count="8">m</span>atch String.split data ~on with
-  | [left; right] -&gt;
-      (<span data-count="58">_</span>_decode ~reason left, __decode ~rea<span data-count="8">s</span>on right)
+let __decode ~reason data =
+  try Encoding.decode_as_blob<span data-count="64"> </span>data with _ -&gt; raise reason
+
+let __<span data-count="7">s</span>plit ~reason ~on data =
+  match String.split data ~<span data-count="304">o</span>n with
+  | [metad<span data-count="13">a</span>ta; iv; cipher; tag] -&gt;
+      let metadata' = __decode ~r<span data-count="13">e</span>ason metadata in
+      let iv' = __decode ~reason iv in
+      let cipher' = __decode ~reason cipher in
+      let tag' = __decode ~reason tag in
+      (metadata', iv', cipher', tag')
   | _ -&gt;
       raise reason
 
-let reveal ~<span data-count="129">c</span>ommitment ~openin<span data-count="246">g</span> =
+let reveal ~commitment ~opening =
   let open Reasons in
-  let key, iv = __split ~reason:<span data-count="126">I</span>nvalidOpening ~on:'.' opening in
-  let cipher, tag = __split ~reason:InvalidCommitment ~on:'@' commitment in
-  let payload = Encryption.decrypt ~reason:BindingFailure ~key ~iv ~cipher ~tag in
-  let parts = String.split ~on:':' payload in
-  Encoding.decode @@ List.nth_exn parts 0 (* discards fingerprint at index 1 *)
+  let key = __decode ~reason:InvalidOpening opening in
+  let metadata, iv, cipher, tag =
+    __split ~reason:InvalidCommitment ~on:'@' commitment
+  in
+  let payload =
+    Encryption.decrypt ~reason:BindingFailure ~key ~iv ~metadata ~cipher ~tag
+  in
+  Encoding.decode @@ Cstruct.to_string payload
 </pre>
       </div>
     </div>
-    <div id="footer">Generated on 2019-05-26 22:26:39 by <a href="https://github.com/aantron/bisect_ppx">Bisect_ppx</a> 1.4.1</div>
+    <div id="footer">Generated on 2019-08-04 17:11:42 by <a href="https://github.com/aantron/bisect_ppx">Bisect_ppx</a> 1.4.1</div>
     <script src="../coverage.js"></script>
   </body>
 </html>
