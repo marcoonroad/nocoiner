@@ -31,9 +31,10 @@
 <a id="L11"></a><span class="visited"> </span>
 <a id="L12"></a><span class="visited"> </span>
 <a id="L13"></a><span > </span>
-<a id="L14"></a><span class="visited"> </span>
-<a id="L15"></a><span > </span>
-<a id="L16"></a><span class="visited"> </span>
+<a id="L14"></a><span > </span>
+<a id="L15"></a><span class="visited"> </span>
+<a id="L16"></a><span > </span>
+<a id="L17"></a><span class="visited"> </span>
 </pre>
       </div>
       <div id="text-layer">
@@ -54,6 +55,7 @@
 <a href="#L14">14</a>
 <a href="#L15">15</a>
 <a href="#L16">16</a>
+<a href="#L17">17</a>
 </pre>
         <pre id="code">
 module Int = Core.Int
@@ -69,13 +71,14 @@ let pad ~basis msg =
   <span data-count="12">l</span>et zerofill = <span data-count="12">S</span>tring.make (basis - remainder) __nullchar in
   <span data-count="12">e</span>ncoded ^ zerofill
 
-let __nonzero char = <span data-count="5952">c</span>har != __nullchar
 
-let unpad msg = <span data-count="55">E</span>ncoding.decode @@ String.filter ~f:__nonzero msg
+let __nonzero char =<span data-count="5952"> </span>char != __nullchar
+
+let unpad msg =<span data-count="55"> </span>Encoding.decode @@ String.filter ~f:__nonzero msg
 </pre>
       </div>
     </div>
-    <div id="footer">Generated on 2019-08-04 17:11:42 by <a href="https://github.com/aantron/bisect_ppx">Bisect_ppx</a> 1.4.1</div>
+    <div id="footer">Generated on 2019-08-04 23:31:08 by <a href="https://github.com/aantron/bisect_ppx">Bisect_ppx</a> 1.4.1</div>
     <script src="../coverage.js"></script>
   </body>
 </html>

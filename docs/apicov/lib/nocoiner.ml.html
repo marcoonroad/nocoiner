@@ -29,26 +29,26 @@
 <a id="L9"></a><span class="visited"> </span>
 <a id="L10"></a><span class="visited"> </span>
 <a id="L11"></a><span > </span>
-<a id="L12"></a><span class="visited"> </span>
-<a id="L13"></a><span > </span>
-<a id="L14"></a><span class="visited"> </span>
+<a id="L12"></a><span > </span>
+<a id="L13"></a><span class="visited"> </span>
+<a id="L14"></a><span > </span>
 <a id="L15"></a><span class="visited"> </span>
 <a id="L16"></a><span class="visited"> </span>
 <a id="L17"></a><span class="visited"> </span>
 <a id="L18"></a><span class="visited"> </span>
-<a id="L19"></a><span > </span>
-<a id="L20"></a><span class="visited"> </span>
-<a id="L21"></a><span > </span>
+<a id="L19"></a><span class="visited"> </span>
+<a id="L20"></a><span > </span>
+<a id="L21"></a><span class="visited"> </span>
 <a id="L22"></a><span > </span>
-<a id="L23"></a><span class="visited"> </span>
+<a id="L23"></a><span > </span>
 <a id="L24"></a><span > </span>
 <a id="L25"></a><span class="visited"> </span>
-<a id="L26"></a><span class="visited"> </span>
-<a id="L27"></a><span class="visited"> </span>
+<a id="L26"></a><span > </span>
+<a id="L27"></a><span > </span>
 <a id="L28"></a><span class="visited"> </span>
-<a id="L29"></a><span > </span>
-<a id="L30"></a><span > </span>
-<a id="L31"></a><span > </span>
+<a id="L29"></a><span class="visited"> </span>
+<a id="L30"></a><span class="visited"> </span>
+<a id="L31"></a><span class="visited"> </span>
 <a id="L32"></a><span > </span>
 <a id="L33"></a><span > </span>
 <a id="L34"></a><span > </span>
@@ -63,6 +63,10 @@
 <a id="L43"></a><span > </span>
 <a id="L44"></a><span > </span>
 <a id="L45"></a><span > </span>
+<a id="L46"></a><span > </span>
+<a id="L47"></a><span > </span>
+<a id="L48"></a><span > </span>
+<a id="L49"></a><span > </span>
 </pre>
       </div>
       <div id="text-layer">
@@ -112,6 +116,10 @@
 <a href="#L43">43</a>
 <a href="#L44">44</a>
 <a href="#L45">45</a>
+<a href="#L46">46</a>
+<a href="#L47">47</a>
+<a href="#L48">48</a>
+<a href="#L49">49</a>
 </pre>
         <pre id="code">
 module Reasons = Exceptions
@@ -125,29 +133,33 @@ let __join ~on list =
   |&gt; List.map ~f:Enc<span data-count="12">o</span>ding.enco<span data-count="12">d</span>e_blob
   |&gt; List.re<span data-count="12">d</span>uce_exn <span data-count="12">~</span>f:(__concat_on on)
 
-let commit paylo<span data-count="12">a</span>d =
+
+let commit payl<span data-count="12">o</span>ad =
   let key = Entropy.key () in
-  let i<span data-count="12">v</span> = Entropy.iv ()<span data-count="12"> </span>in
-  let metadata = Cstruct.of<span data-count="12">_</span>string @@ Fin<span data-count="12">g</span>erprint.id () in
-  let mes<span data-count="12">s</span>age = Cstruct.of_string @@ Encoding.encode payload i<span data-count="28">n</span>
-  let cipher, tag = Encryption.encry<span data-count="8">p</span>t ~key ~iv ~metadata ~message in
-  let commitment =<span data-count="18"> </span>__join ~on:"@" [metadata; iv; cipher<span data-count="18">;</span> tag] in
+  let <span data-count="12">i</span>v = Entropy.iv (<span data-count="12">)</span> in
+  let metadata = Cstruct.o<span data-count="12">f</span>_string @@ Fi<span data-count="12">n</span>gerprint.id () in
+  let me<span data-count="12">s</span>sage = Cstruct.of_string @@ Encoding.encode payload <span data-count="28">i</span>n
+  let cipher, tag = Encryption.encr<span data-count="8">y</span>pt ~key ~iv ~metadata ~message in
+  let commitment <span data-count="18">=</span> __join ~on:"@" [ metadata; iv; ciph<span data-count="18">e</span>r; tag ] in
   let opening = Encoding.encode_blob key in
-  (commitment, openin<span data-count="8">g</span>)
+  (commitment, ope<span data-count="8">n</span>ing)
+
 
 let __decode ~reason data =
-  try Encoding.decode_as_blob<span data-count="64"> </span>data with _ -&gt; raise reason
+  try Encoding.decode_as_<span data-count="64">b</span>lob data with _ -&gt; raise reason
 
-let __<span data-count="7">s</span>plit ~reason ~on data =
-  match String.split data ~<span data-count="304">o</span>n with
-  | [metad<span data-count="13">a</span>ta; iv; cipher; tag] -&gt;
-      let metadata' = __decode ~r<span data-count="13">e</span>ason metadata in
+
+l<span data-count="7">e</span>t __split ~reason ~on data =
+  match String.split d<span data-count="304">a</span>ta ~on with
+  | [<span data-count="13"> </span>metadata; iv; cipher; tag ] -&gt;
+      let metadata' = __de<span data-count="13">c</span>ode ~reason metadata in
       let iv' = __decode ~reason iv in
       let cipher' = __decode ~reason cipher in
       let tag' = __decode ~reason tag in
       (metadata', iv', cipher', tag')
   | _ -&gt;
       raise reason
+
 
 let reveal ~commitment ~opening =
   let open Reasons in
@@ -162,7 +174,7 @@ let reveal ~commitment ~opening =
 </pre>
       </div>
     </div>
-    <div id="footer">Generated on 2019-08-04 17:11:42 by <a href="https://github.com/aantron/bisect_ppx">Bisect_ppx</a> 1.4.1</div>
+    <div id="footer">Generated on 2019-08-04 23:31:08 by <a href="https://github.com/aantron/bisect_ppx">Bisect_ppx</a> 1.4.1</div>
     <script src="../coverage.js"></script>
   </body>
 </html>
