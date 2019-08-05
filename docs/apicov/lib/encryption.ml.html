@@ -26,7 +26,7 @@
 <a id="L6"></a><span class="visited"> </span>
 <a id="L7"></a><span class="visited"> </span>
 <a id="L8"></a><span class="visited"> </span>
-<a id="L9"></a><span > </span>
+<a id="L9"></a><span class="visited"> </span>
 <a id="L10"></a><span > </span>
 <a id="L11"></a><span > </span>
 <a id="L12"></a><span class="visited"> </span>
@@ -37,29 +37,29 @@
 <a id="L17"></a><span > </span>
 <a id="L18"></a><span > </span>
 <a id="L19"></a><span > </span>
-<a id="L20"></a><span > </span>
-<a id="L21"></a><span > </span>
-<a id="L22"></a><span > </span>
-<a id="L23"></a><span > </span>
-<a id="L24"></a><span > </span>
+<a id="L20"></a><span class="visited"> </span>
+<a id="L21"></a><span class="visited"> </span>
+<a id="L22"></a><span class="visited"> </span>
+<a id="L23"></a><span class="visited"> </span>
+<a id="L24"></a><span class="visited"> </span>
 <a id="L25"></a><span > </span>
-<a id="L26"></a><span > </span>
-<a id="L27"></a><span > </span>
-<a id="L28"></a><span > </span>
-<a id="L29"></a><span > </span>
+<a id="L26"></a><span class="visited"> </span>
+<a id="L27"></a><span class="visited"> </span>
+<a id="L28"></a><span class="visited"> </span>
+<a id="L29"></a><span class="visited"> </span>
 <a id="L30"></a><span > </span>
 <a id="L31"></a><span > </span>
 <a id="L32"></a><span > </span>
-<a id="L33"></a><span > </span>
-<a id="L34"></a><span > </span>
-<a id="L35"></a><span > </span>
-<a id="L36"></a><span > </span>
-<a id="L37"></a><span > </span>
+<a id="L33"></a><span class="visited"> </span>
+<a id="L34"></a><span class="visited"> </span>
+<a id="L35"></a><span class="visited"> </span>
+<a id="L36"></a><span class="visited"> </span>
+<a id="L37"></a><span class="visited"> </span>
 <a id="L38"></a><span > </span>
-<a id="L39"></a><span > </span>
-<a id="L40"></a><span > </span>
-<a id="L41"></a><span > </span>
-<a id="L42"></a><span > </span>
+<a id="L39"></a><span class="visited"> </span>
+<a id="L40"></a><span class="visited"> </span>
+<a id="L41"></a><span class="visited"> </span>
+<a id="L42"></a><span class="visited"> </span>
 </pre>
       </div>
       <div id="text-layer">
@@ -112,48 +112,48 @@ module String = Core.String
 module AES = Nocrypto.Cipher_block.AES.CBC
 
 let __kdf key =
-  let aes_salt = Entro<span data-count="71">p</span>y.min_bit<span data-count="71">s</span> (32 * 8) in
-  let mac<span data-count="71">_</span>salt = Entropy.<span data-count="71">m</span>ax_bits (32 * 8) in
-  let aes_<span data-count="71">k</span>ey = Hardeni<span data-count="71">n</span>g.kdf ~size:32l ~salt:aes_salt key in
-  let mac_key = Ha<span data-count="71">r</span>dening.kdf ~size:32l ~salt:mac_salt key in
-  (aes_key, mac_key)
+  <span data-count="67">l</span>et aes_salt = <span data-count="67">E</span>ntropy.min_bits (32 * 8) in
+  <span data-count="67">l</span>et mac_salt = <span data-count="67">E</span>ntropy.max_bits (32 * 8) in
+  <span data-count="67">l</span>et aes_key = <span data-count="67">H</span>ardening.kdf ~size:32l ~salt:aes_salt key in
+  <span data-count="67">l</span>et mac_key = <span data-count="67">H</span>ardening.kdf ~size:32l ~salt:mac_salt key in
+  <span data-count="67">(</span>aes_key, mac_key)
 
 
-let hash data = C<span data-count="13">s</span>truct.of_<span data-count="72">h</span>ex @@ Hashing.hash @@ <span data-count="72">C</span>struct.to_st<span data-count="72">r</span>ing data
+let hash data = <span data-count="67">C</span>struct.of_hex @@ Hashing.hash @@ Cstruct.to_string data
 
 let mac ~key data =
-  <span data-count="72">l</span>et key', data' = (Cstruct.to_string key, Cst<span data-count="69">r</span>uct.to_string data) in
-  Cstruct.of_hex @@ Hashing.mac ~key:<span data-count="70">k</span>ey' data'
+  <span data-count="67">l</span>et key', data' = <span data-count="67">(</span>Cstruct.to_string key, Cstruct.to_string data) in
+  <span data-count="67">C</span>struct.of_hex @@ Hashing.mac ~key:key' data'
 
 
 let encrypt ~key ~iv ~metadata ~message:msg =
-  let aes_key, mac_key = __kdf key in
-  let aes_key' = AES.of_secret aes_key in
-  let plaintext = Helpers.pad ~basis:16 @@ Cstruct.to_string msg in
-  let ciphertext =
-    AES.encrypt ~iv ~key:aes_key' @@ Cstruct.of_string plaintext
+  <span data-count="8">l</span>et aes_key, mac_key = <span data-count="8">_</span>_kdf key in
+  <span data-count="8">l</span>et aes_key' = <span data-count="8">A</span>ES.of_secret aes_key in
+  <span data-count="8">l</span>et plaintext = <span data-count="8">H</span>elpers.pad ~basis:16 @@ Cstruct.to_string msg in
+  <span data-count="8">l</span>et ciphertext =
+    <span data-count="8">A</span>ES.encrypt ~iv ~key:aes_key' @@ Cstruct.of_string plaintext
   in
-  let secret = hash mac_key in
-  let payload = Cstruct.concat [ metadata; iv; ciphertext ] in
-  let tag = mac ~key:secret payload in
-  (ciphertext, tag)
+  <span data-count="8">l</span>et secret = <span data-count="8">h</span>ash mac_key in
+  <span data-count="8">l</span>et payload = <span data-count="8">C</span>struct.concat [ metadata; iv; ciphertext ] in
+  <span data-count="8">l</span>et tag = <span data-count="8">m</span>ac ~key:secret payload in
+  <span data-count="8">(</span>ciphertext, tag)
 
 
 let decrypt ~reason ~key ~iv ~metadata ~cipher ~tag =
-  let aes_key, mac_key = __kdf key in
-  let secret = hash mac_key in
-  let payload = Cstruct.concat [ metadata; iv; cipher ] in
-  let tag' = mac ~key:secret payload in
-  if Cstruct.equal tag tag'
+  <span data-count="59">l</span>et aes_key, mac_key = <span data-count="59">_</span>_kdf key in
+  <span data-count="59">l</span>et secret = <span data-count="59">h</span>ash mac_key in
+  <span data-count="59">l</span>et payload = <span data-count="59">C</span>struct.concat [ metadata; iv; cipher ] in
+  <span data-count="59">l</span>et tag' = <span data-count="59">m</span>ac ~key:secret payload in
+  <span data-count="59">i</span>f Cstruct.equal tag tag'
   then
-    let aes_key' = AES.of_secret aes_key in
-    let plaintext = AES.decrypt ~iv ~key:aes_key' cipher in
-    Cstruct.of_string @@ Helpers.unpad @@ Cstruct.to_string plaintext
-  else raise reason
+    <span data-count="53">l</span>et aes_key' = <span data-count="53">A</span>ES.of_secret aes_key in
+    <span data-count="53">l</span>et plaintext = <span data-count="53">A</span>ES.decrypt ~iv ~key:aes_key' cipher in
+    <span data-count="53">C</span>struct.of_string @@ Helpers.unpad @@ Cstruct.to_string plaintext
+  else <span data-count="6">r</span>aise reason
 </pre>
       </div>
     </div>
-    <div id="footer">Generated on 2019-08-04 23:31:08 by <a href="https://github.com/aantron/bisect_ppx">Bisect_ppx</a> 1.4.1</div>
+    <div id="footer">Generated on 2019-08-05 16:21:33 by <a href="https://github.com/aantron/bisect_ppx">Bisect_ppx</a> 1.4.1</div>
     <script src="../coverage.js"></script>
   </body>
 </html>

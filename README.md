@@ -40,6 +40,12 @@ nocoiner
   href="https://github.com/marcoonroad/nocoiner/compare"
   title="Interested in contribute with this project?"><img
   src="https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat-square&logo=github"/></a>
+<!-- GitHub latest release/tag -->
+<a
+  style="margin: 0.1em;"
+  href="https://github.com/marcoonroad/nocoiner/releases"
+  title="Check the GitHub repository releases here."><img
+  src="https://img.shields.io/github/tag-date/marcoonroad/nocoiner?logo=github&style=flat-square"></a>
 <!-- Donate BTC badge -->
 <a
   style="margin: 0.1em;"
