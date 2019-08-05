@@ -12,6 +12,6 @@ let id () =
   let hostname = hash @@ Unix.gethostname () in
   let cwd = hash @@ Unix.getcwd () in
   let context =
-    Cstruct.to_string @@ xor_list [timestamp; pid; hostname; cwd]
+    Cstruct.to_string @@ xor_list [ timestamp; pid; hostname; cwd ]
   in
   Encoding.encode @@ Hashing.raw_hash context

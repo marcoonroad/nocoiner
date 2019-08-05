@@ -12,4 +12,5 @@ let decode_as_blob encoded =
   | None ->
       failwith "Failed to decode Base 64 blob!"
 
+
 let decode encoded = Cstruct.to_string @@ decode_as_blob encoded

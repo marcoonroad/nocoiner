@@ -43,6 +43,7 @@
 <a id="L23"></a><span > </span>
 <a id="L24"></a><span > </span>
 <a id="L25"></a><span > </span>
+<a id="L26"></a><span > </span>
 </pre>
       </div>
       <div id="text-layer">
@@ -72,6 +73,7 @@
 <a href="#L23">23</a>
 <a href="#L24">24</a>
 <a href="#L25">25</a>
+<a href="#L26">26</a>
 </pre>
         <pre id="code">
 module RngZ = Nocrypto.Rng.Z
@@ -90,6 +92,7 @@ let __random_bits bits =
   let _max_random = __max_bits bit<span data-count="20">s</span> in
   NumZ.to_cstruct_be @@ Rn<span data-count="20">g</span>Z.gen_r _min_random _max_r<span data-count="81">a</span>ndom
 
+
 let max_bits bits = NumZ.to_cstruct_be @@ __max_bits bits
 
 let min_bits bits = NumZ.to_cstruct_be @@ __min_bits bits
@@ -102,7 +105,7 @@ let _ = Nocrypto_entropy_unix.initialize ()
 </pre>
       </div>
     </div>
-    <div id="footer">Generated on 2019-08-04 17:11:42 by <a href="https://github.com/aantron/bisect_ppx">Bisect_ppx</a> 1.4.1</div>
+    <div id="footer">Generated on 2019-08-04 23:31:08 by <a href="https://github.com/aantron/bisect_ppx">Bisect_ppx</a> 1.4.1</div>
     <script src="../coverage.js"></script>
   </body>
 </html>

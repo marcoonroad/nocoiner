@@ -8,7 +8,6 @@ default: build
 
 test: build
 	@ opam lint
-	@ make lint-format
 	@ dune build @test/spec/runtest -f --no-buffer -j 1
 
 build:

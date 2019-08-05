@@ -21,7 +21,7 @@ let __binding _ =
   let p4 () = ignore @@ Nocoiner.reveal ~commitment:c3 ~opening:o1 in
   let p5 () = ignore @@ Nocoiner.reveal ~commitment:c3 ~opening:o2 in
   let p6 () = ignore @@ Nocoiner.reveal ~commitment:c2 ~opening:o3 in
-  let ps = [p1; p2; p3; p4; p5; p6] in
+  let ps = [ p1; p2; p3; p4; p5; p6 ] in
   let check i p =
     let msg = "opening fails on procedure " ^ string_of_int @@ succ i in
     Alcotest.check_raises msg reason p
@@ -30,6 +30,7 @@ let __binding _ =
   Alcotest.(check string) "message 2 was opened" m2 _SECRET_1 ;
   Alcotest.(check string) "message 3 was opened" m3 _SECRET_2 ;
   List.iteri ps ~f:check
+
 
 let __invalid_pairs _ =
   let c1, o1 = Nocoiner.commit _SECRET_1 in
@@ -45,8 +46,10 @@ let __invalid_pairs _ =
   Alcotest.check_raises "invalid opening" InvalidOpening p3 ;
   Alcotest.check_raises "invalid commitment" InvalidCommitment p4
 
+
 let rec __loop p i n =
   if i >= n then true else if p () then __loop p (i + 1) n else false
+
 
 let __deterministic_opening _ =
   let c, o = Nocoiner.commit _SECRET_3 in
@@ -54,7 +57,9 @@ let __deterministic_opening _ =
   let p () = _SECRET_3 = f () in
   Alcotest.(check bool) "replayable opening" true @@ __loop p 0 50
 
+
 let suite =
   [ ("binding case", `Quick, __binding)
   ; ("invalid pairs case", `Quick, __invalid_pairs)
-  ; ("deterministic opening case", `Quick, __deterministic_opening) ]
+  ; ("deterministic opening case", `Quick, __deterministic_opening)
+  ]
