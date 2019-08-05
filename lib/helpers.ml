@@ -11,6 +11,7 @@ let pad ~basis msg =
   let zerofill = String.make (basis - remainder) __nullchar in
   encoded ^ zerofill
 
+
 let __nonzero char = char != __nullchar
 
 let unpad msg = Encoding.decode @@ String.filter ~f:__nonzero msg
