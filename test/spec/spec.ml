@@ -5,6 +5,8 @@
 *)
 
 ;;
-Alcotest.run "nocoiner specification"
+Alcotest.run
+  "nocoiner specification"
   [ ("commit operation suite", Commit.suite)
-  ; ("reveal operation suite", Reveal.suite) ]
+  ; ("reveal operation suite", Reveal.suite)
+  ]

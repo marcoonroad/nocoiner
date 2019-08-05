@@ -30,5 +30,7 @@ let __nondeterministic_commitment _ =
   Alcotest.(check @@ neg string) "integrity tags differ" tg1 tg3 ;
   Alcotest.(check @@ neg string) "integrity tags differ" tg3 tg2
 
+
 let suite =
-  [("non-deterministic commitment case", `Quick, __nondeterministic_commitment)]
+  [ ("non-deterministic commitment case", `Quick, __nondeterministic_commitment)
+  ]

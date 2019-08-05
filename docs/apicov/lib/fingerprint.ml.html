@@ -72,13 +72,13 @@ let id () =
   <span data-count="8">l</span>et hostname = <span data-count="8">h</span>ash @@ Unix.gethostname () in
   <span data-count="8">l</span>et cwd = <span data-count="8">h</span>ash @@ Unix.getcwd () in
   <span data-count="8">l</span>et context =
-    <span data-count="8">C</span>struct.to_string @@ xor_list [timestamp; pid; hostname; cwd]
+    <span data-count="8">C</span>struct.to_string @@ xor_list [ timestamp; pid; hostname; cwd ]
   in
   <span data-count="8">E</span>ncoding.encode @@ Hashing.raw_hash context
 </pre>
       </div>
     </div>
-    <div id="footer">Generated on 2019-08-04 17:11:42 by <a href="https://github.com/aantron/bisect_ppx">Bisect_ppx</a> 1.4.1</div>
+    <div id="footer">Generated on 2019-08-04 23:31:08 by <a href="https://github.com/aantron/bisect_ppx">Bisect_ppx</a> 1.4.1</div>
     <script src="../coverage.js"></script>
   </body>
 </html>
