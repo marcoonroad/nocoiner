@@ -8,7 +8,7 @@ default: build
 
 test: build
 	@ opam lint
-	@ dune build @test/spec/runtest -f --no-buffer -j 1
+	@ dune build @test/spec/runtest -f --no-buffer
 
 build:
 	@ dune build -j 1
@@ -22,6 +22,8 @@ uninstall:
 clear:
 	@ rm -rfv bisect*.out
 	@ dune clean
+
+clean: clear
 
 coverage: clear
 	@ mkdir -p docs/
@@ -116,6 +118,13 @@ local-site-setup:
 
 local-site-start:
 	@ cd docs && bundle exec jekyll serve && cd ..
+
+bench: clean build
+	@ NOCOINER_KDF_COST=2 \
+	  NOCOINER_KDF_WORKERS=1 \
+	  dune build @test/bench/runtest -f --no-buffer --auto-promote \
+	  --diff-command="git diff --unified=10 --break-rewrites --no-index --exit-code --histogram --word-diff=none --color --no-prefix" || echo \
+	  "\n\n=== Differences detected! ===\n\n"
 
 # to run inside docker alpine context
 binary: clear
