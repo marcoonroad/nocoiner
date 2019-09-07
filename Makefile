@@ -89,6 +89,7 @@ dev-deps:
 		merlin \
 		bisect_ppx \
 		utop \
+		core_bench \
 		--yes
 	@ opam update --yes
 	@ opam upgrade \
@@ -100,6 +101,7 @@ dev-deps:
 		merlin \
 		bisect_ppx \
 		utop \
+		core_bench \
 		--yes
 
 lint-format:
@@ -120,6 +122,7 @@ local-site-start:
 	@ cd docs && bundle exec jekyll serve && cd ..
 
 bench: clean build
+	@ opam install core_bench --yes
 	@ NOCOINER_KDF_COST=2 \
 	  NOCOINER_KDF_WORKERS=1 \
 	  dune build @test/bench/runtest -f --no-buffer --auto-promote \
