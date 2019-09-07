@@ -53,4 +53,5 @@ let decrypt ~reason ~key ~iv ~metadata ~cipher ~tag =
     then raise (DecryptedPlaintext decrypted)
     else raise reason
   with
-  | DecryptedPlaintext result -> result
+  | DecryptedPlaintext result ->
+      result
