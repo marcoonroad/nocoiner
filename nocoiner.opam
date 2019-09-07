@@ -1,6 +1,6 @@
 opam-version: "2.0"
 name: "nocoiner"
-version: "1.0.0"
+version: "1.0.1"
 synopsis: "A Commitment Scheme library for Coin Flipping/Tossing algorithms and sort"
 description: """
 This project implements Commitment Schemes using the
@@ -31,5 +31,6 @@ depends: [
   "scrypt-kdf" {>= "1.0.0"}
   "digestif" {>= "0.7.0"}
   "core" {>= "v0.9.1"}
+  "eqaf" {>= "0.5"}
   "bisect_ppx" {>= "1.4.1"}
 ]

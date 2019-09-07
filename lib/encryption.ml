@@ -29,14 +29,28 @@ let encrypt ~key ~iv ~metadata ~message:msg =
   (ciphertext, tag)
 
 
+exception DecryptedPlaintext of Cstruct.t
+
 let decrypt ~reason ~key ~iv ~metadata ~cipher ~tag =
   let aes_key, mac_key = __kdf key in
   let secret = hash mac_key in
   let payload = Cstruct.concat [ metadata; iv; cipher ] in
   let tag' = mac ~key:secret payload in
-  if Cstruct.equal tag tag'
-  then
-    let aes_key' = AES.of_secret aes_key in
-    let plaintext = AES.decrypt ~iv ~key:aes_key' cipher in
+  (* we decypher before the tag verification to avoid
+     exploitable side-channels vulnerabilities such as
+     timing attacks. we also check the tags in linear
+     time regarding the tag size in bytes *)
+  let aes_key' = AES.of_secret aes_key in
+  let plaintext = AES.decrypt ~iv ~key:aes_key' cipher in
+  let decrypted =
     Cstruct.of_string @@ Helpers.unpad @@ Cstruct.to_string plaintext
-  else raise reason
+  in
+  (* forces both bound and unbound flows to pass through the exception triggering
+     pipeline. this is just to approximate both execution timings to reduce the
+     vector attacks for side-channel attacks *)
+  try
+    if Eqaf_cstruct.equal tag tag'
+    then raise (DecryptedPlaintext decrypted)
+    else raise reason
+  with
+  | DecryptedPlaintext result -> result

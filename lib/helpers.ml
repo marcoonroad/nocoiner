@@ -14,4 +14,7 @@ let pad ~basis msg =
 
 let __nonzero char = char != __nullchar
 
-let unpad msg = Encoding.decode @@ String.filter ~f:__nonzero msg
+(* ignores input if it can't be base64-decoded after dropping null-padding data *)
+let unpad msg =
+  let filtered = String.filter ~f:__nonzero msg in
+  try Encoding.decode @@ filtered with Failure _ -> msg

@@ -242,7 +242,14 @@ were executed with major heap compaction disabled to not mask execution time.</i
 
 <p></p>
 
-TODO.
+As you can see, there's much more computations performed on valid/bound inputs than on unbound inputs. Inputs
+are bound (the opening key and the commitment box) if they were previously computed during commitment phase.
+Otherwise, the inputs are unbound _even if they were computed over the same secret during commitment_. This
+is a huge important thing when we want a group of commitments (performed by many parties) to be independent
+of each other. The security patch introduced on version `1.0.1` uses the [eqaf][10] library to compare in
+constant time the MAC tags, and we also force decryption step even if a MAC tag mismatch occurs (obviously
+the decrypted plain-text is ignored in this case and the whole opening phase fails).
+
 
 
 ### Disclaimer
@@ -272,3 +279,4 @@ process context).
   [7]: https://marcoonroad.dev/nocoiner/apiref/nocoiner/Nocoiner/index.html
   [8]: https://marcoonroad.dev/nocoiner/apicov/index.html
   [9]: https://github.com/marcoonroad/nocoiner/issues/1
+  [10]: https://github.com/mirage/eqaf
