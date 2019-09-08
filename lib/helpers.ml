@@ -1,8 +1,7 @@
 module Int = Core.Int
 module String = Core.String
-module Char = Core.Char
 
-let __nullchar = Char.of_int_exn 0
+let __nullchar = Char.unsafe_chr 0
 
 let pad ~basis msg =
   let encoded = Encoding.encode msg in

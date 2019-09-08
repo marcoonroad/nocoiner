@@ -1,19 +1,22 @@
 module String = Core.String
 module AES = Nocrypto.Cipher_block.AES.CBC
 
+let _MIN_BITS = Entropy.min_bits (32 * 8)
+let _MAX_BITS = Entropy.max_bits (32 * 8)
+
 let __kdf key =
-  let aes_salt = Entropy.min_bits (32 * 8) in
-  let mac_salt = Entropy.max_bits (32 * 8) in
+  let aes_salt = _MIN_BITS in
+  let mac_salt = _MAX_BITS in
   let aes_key = Hardening.kdf ~size:32l ~salt:aes_salt key in
   let mac_key = Hardening.kdf ~size:32l ~salt:mac_salt key in
   (aes_key, mac_key)
 
 
-let hash data = Cstruct.of_hex @@ Hashing.hash @@ Cstruct.to_string data
+let hash data = Cstruct.of_string @@ Hashing.raw_hash @@ Cstruct.to_string data
 
 let mac ~key data =
   let key', data' = (Cstruct.to_string key, Cstruct.to_string data) in
-  Cstruct.of_hex @@ Hashing.mac ~key:key' data'
+  Cstruct.of_string @@ Hashing.raw_mac ~key:key' data'
 
 
 let encrypt ~key ~iv ~metadata ~message:msg =
@@ -24,7 +27,7 @@ let encrypt ~key ~iv ~metadata ~message:msg =
     AES.encrypt ~iv ~key:aes_key' @@ Cstruct.of_string plaintext
   in
   let secret = hash mac_key in
-  let payload = Cstruct.concat [ metadata; iv; ciphertext ] in
+  let payload = Cstruct.append metadata @@ Cstruct.append iv ciphertext in
   let tag = mac ~key:secret payload in
   (ciphertext, tag)
 
@@ -34,7 +37,7 @@ exception DecryptedPlaintext of Cstruct.t
 let decrypt ~reason ~key ~iv ~metadata ~cipher ~tag =
   let aes_key, mac_key = __kdf key in
   let secret = hash mac_key in
-  let payload = Cstruct.concat [ metadata; iv; cipher ] in
+  let payload = Cstruct.append metadata @@ Cstruct.append iv cipher in
   let tag' = mac ~key:secret payload in
   (* we decypher before the tag verification to avoid
      exploitable side-channels vulnerabilities such as

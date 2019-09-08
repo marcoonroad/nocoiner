@@ -1,9 +1,9 @@
 module RngZ = Nocrypto.Rng.Z
 module NumZ = Nocrypto.Numeric.Z
 
-let __gen_min bits = "1" ^ Core.String.init (bits - 1) ~f:(Core.const '0')
+let __gen_min bits = "1" ^ Core.String.make (bits - 1) '0'
 
-let __gen_max bits = Core.String.init bits ~f:(Core.const '1')
+let __gen_max bits = Core.String.make bits '1'
 
 let __max_bits bits = Z.of_string_base 2 @@ __gen_max bits
 

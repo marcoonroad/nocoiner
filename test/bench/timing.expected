@@ -1,11 +1,11 @@
-Estimated testing time 45s (3 benchmarks x 15s). Change using -quota SECS.
-bound opening: Total time taken 15.14s (156 samples, max runs 156).
-unbound commitment: Total time taken 15.1478s (158 samples, max runs 158).
-unbound opening: Total time taken 15.0146s (157 samples, max runs 157).
+Estimated testing time 45s (3 benchmarks x 15s). Change using '-quota'.
+bound opening: Total time taken 15.025686502456665s (152 samples, max runs 152).
+unbound commitment: Total time taken 15.143573999404907s (153 samples, max runs 153).
+unbound opening: Total time taken 15.000829935073853s (153 samples, max runs 153).
                                                                                                                                                                                                
   Name                 Runs @ Samples   Time/Run   Cycls/Run   mWd/Run   mWd Overhd   mjWd/Run   mjWd Overhd   Prom/Run   Prom Overhd    mGC/Run   mjGC/Run   Comp/Run   Percentage   Speedup  
  -------------------- ---------------- ---------- ----------- --------- ------------ ---------- ------------- ---------- ------------- ---------- ---------- ---------- ------------ --------- 
-  bound opening             156 @ 156   841.47us    874.71kc   19.78kw       25.82w     18.59w        35.39w     18.59w        35.39w   70.62e-3    0.00e-9    0.00e-9      100.00%      1.02  
-  unbound commitment        158 @ 158   823.70us    856.24kc   19.69kw       23.02w     22.75w      -132.15w     22.75w      -132.15w   70.32e-3    0.00e-9    0.00e-9       97.89%      1.00  
-  unbound opening           157 @ 157   826.47us    859.12kc   19.69kw       23.02w     22.81w      -135.02w     22.81w      -135.02w   70.33e-3    0.00e-9    0.00e-9       98.22%      1.00  
+  bound opening             152 @ 152   822.06us    854.61kc   15.24kw       24.06w     15.45w       -90.52w     15.45w       -90.52w   53.13e-3    0.00e-9    0.00e-9       99.93%      1.00  
+  unbound commitment        153 @ 153   822.62us    855.13kc   15.14kw       25.53w     14.37w        91.98w     14.37w        91.98w   52.84e-3    0.00e-9    0.00e-9      100.00%      1.01  
+  unbound opening           153 @ 153   818.01us    850.32kc   15.14kw       25.53w     14.37w        91.98w     14.37w        91.98w   52.84e-3    0.00e-9    0.00e-9       99.44%      1.00  
                                                                                                                                                                                                
