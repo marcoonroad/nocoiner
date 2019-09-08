@@ -18,7 +18,7 @@ env:
     - OCAML_VERSION=4.04 POST_INSTALL_HOOK="make report"
     - OCAML_VERSION=4.05 POST_INSTALL_HOOK="make report"
     - OCAML_VERSION=4.06 POST_INSTALL_HOOK="make lint-format; make report"
-    - OCAML_VERSION=4.07 POST_INSTALL_HOOK="make lint-format; make report"
+    - OCAML_VERSION=4.07 POST_INSTALL_HOOK="make lint-format; make bench; make report"
 os:
   - linux
 # - osx

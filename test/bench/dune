@@ -5,4 +5,4 @@
   (run %{test} time cycles alloc gc percentage speedup samples -all-values
     -ascii -fork -no-compactions -overheads -quota 15 -stabilize-gc -width
     300 -v -display tall))
- (libraries core_bench nocoiner))
+ (libraries nocoiner.bench))

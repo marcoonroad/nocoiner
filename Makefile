@@ -73,11 +73,14 @@ docs: build
 	@ mv ./_build/default/_doc/_html/* ./docs/apiref/
 
 pin:
-	@ opam pin add nocoiner . -n --yes
+	@ opam pin add nocoiner . -n --yes --working-dir
+
+unpin:
+	@ opam pin remove nocoiner --yes
 
 deps:
-	@ opam install . --deps-only --yes
-	@ opam install alcotest core --yes # force such test dependences
+	@ opam install . --deps-only --yes --working-dir
+	@ opam install alcotest --yes # force such test dependences
 
 dev-deps:
 	@ opam install \
@@ -91,18 +94,18 @@ dev-deps:
 		utop \
 		core_bench \
 		--yes
-	@ opam update --yes
-	@ opam upgrade \
-		odoc \
-		ocveralls \
-		alcotest \
-		ocp-indent \
-		ocamlformat \
-		merlin \
-		bisect_ppx \
-		utop \
-		core_bench \
-		--yes
+#	@ opam update --yes
+#	@ opam upgrade \
+#		odoc \
+#		ocveralls \
+#		alcotest \
+#		ocp-indent \
+#		ocamlformat \
+#		merlin \
+#		bisect_ppx \
+#		utop \
+#		core_bench \
+#		--yes
 
 lint-format:
 	@ opam install ocamlformat --yes

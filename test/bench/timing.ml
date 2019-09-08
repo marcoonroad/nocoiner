@@ -1,3 +1,4 @@
+open Nocoiner_bench
 open Core_bench.Bench
 module Command = Core.Command
 
