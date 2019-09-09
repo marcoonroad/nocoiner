@@ -2,6 +2,7 @@ module String = Core.String
 module AES = Nocrypto.Cipher_block.AES.CBC
 
 let _MIN_BITS = Entropy.min_bits (32 * 8)
+
 let _MAX_BITS = Entropy.max_bits (32 * 8)
 
 let __kdf key =
