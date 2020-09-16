@@ -8,6 +8,7 @@ let pad ~basis msg =
   let encoded = Encoding.encode msg in
   let length = String.length encoded in
   let remainder = Int.( % ) length basis in
+  if remainder = 0 then msg else
   let zerofill = String.make (basis - remainder) __nullchar in
   encoded ^ zerofill
 
