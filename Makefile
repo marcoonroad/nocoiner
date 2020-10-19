@@ -52,8 +52,7 @@ coverage: clear
 #	bisect-ppx-report -I _build/default/ -text - `find . -name 'bisect*.out'`
 
 report: deps coverage
-	@ opam install ocveralls --yes
-	@ ocveralls --prefix '_build/default' `find . -name 'bisect*.out'` --send
+	@ bisect-ppx-report send-to Coveralls
 
 #	echo "" > docs/index.md
 #	echo "---" >> docs/index.md
