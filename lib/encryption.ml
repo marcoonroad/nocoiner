@@ -20,13 +20,6 @@ let mac ~key data =
   Cstruct.of_string @@ Hashing.raw_mac ~key:key' data'
 
 
-let mac_compare_equal left right =
-  let key = Entropy.key () in
-  let left' = mac left ~key in
-  let right' = mac right ~key in
-  Eqaf_cstruct.equal left' right'
-
-
 let encrypt ~key ~iv ~metadata ~message:msg =
   let aes_key, mac_key = __kdf key in
   let aes_key' = AES.of_secret aes_key in
@@ -60,7 +53,7 @@ let decrypt ~reason ~key ~iv ~metadata ~cipher ~tag =
      pipeline. this is just to approximate both execution timings to reduce the
      vector attacks for side-channel attacks *)
   try
-    if mac_compare_equal tag tag'
+    if Hashing.mac_compare_cstruct tag tag'
     then raise (DecryptedPlaintext decrypted)
     else raise reason
   with
