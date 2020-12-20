@@ -15,7 +15,7 @@ let pad ~basis msg =
 let pad ~basis msg =
   let length = String.length msg in
   let remainder = Int.( % ) length basis in
-  if remainder = 0 then msg else
+  if remainder = 0 && length != 0 then msg else
   let padsize = basis - remainder in
   let padbyte = Char.unsafe_chr padsize in
   let padfill = String.make padsize padbyte in

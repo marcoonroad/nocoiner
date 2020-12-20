@@ -48,14 +48,20 @@ let __invalid_pairs _ =
 
 
 let rec __loop p i n =
-  if i >= n then true else if p () then __loop p (i + 1) n else false
+  if i >= n then true else if p i then __loop p (i + 1) n else false
 
 
 let __deterministic_opening _ =
   let c, o = Nocoiner.commit _SECRET_3 in
   let f () = Nocoiner.reveal ~commitment:c ~opening:o in
-  let p () = _SECRET_3 = f () in
-  Alcotest.(check bool) "replayable opening" true @@ __loop p 0 50
+  let p _ = _SECRET_3 = f () in
+  Alcotest.(check bool) "replayable opening" true @@ __loop p 0 50 ;
+  let p i =
+    let secret = Core.String.sub _SECRET_3 ~pos:0 ~len:i in
+    let commitment, opening = Nocoiner.commit secret in
+    secret = Nocoiner.reveal ~commitment ~opening
+  in
+  Alcotest.(check bool) "works on any data sizes" true @@ __loop p 0 33
 
 
 let suite =
