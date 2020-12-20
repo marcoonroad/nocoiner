@@ -31,6 +31,6 @@ depends: [
   "scrypt-kdf" {>= "1.0.0"}
   "digestif" {>= "0.7.0"}
   "core" {>= "v0.9.0"}
-  "eqaf" {>= "0.5"}
+  "eqaf" {>= "0.4"}
   "bisect_ppx" {>= "1.4.0"}
 ]
