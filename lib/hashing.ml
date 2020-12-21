@@ -1,9 +1,13 @@
-module Blake2B = Digestif.BLAKE2B
+module SHA256 = Mirage_crypto.Hash.SHA256
 
-let raw_hash data = Blake2B.to_raw_string @@ Blake2B.digest_string data
+let raw_hash data =
+  Cstruct.to_string @@ SHA256.digest @@ Cstruct.of_string data
+
 
 let raw_mac ~key data =
-  Blake2B.to_raw_string @@ Blake2B.Keyed.mac_string ~key data
+  let key' = Cstruct.of_string key in
+  let data' = Cstruct.of_string data in
+  Cstruct.to_string @@ SHA256.hmac ~key:key' data'
 
 
 let mac_compare_string left right =

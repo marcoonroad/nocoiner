@@ -23,14 +23,15 @@ build: [
 run-test: ["dune" "build" "@test/spec/runtest" "-p" name "-j" jobs]
 
 depends: [
-  "ocaml" {>= "4.03.0"}
-  "dune" {>= "1.9"}
+  "ocaml" {>= "4.08.0"}
+  "alcotest" {>= "0.8.4"}
+  "base" {>= "v0.9.0"}
+  "base64" {>= "3.2.0"}
+  "bisect_ppx" {>= "2.0.0"}
   "cmdliner" {>= "1.0.0"}
-  "alcotest" {>= "0.8.0" & with-test}
-  "nocrypto" {>= "0.5.0"}
+  "dune" {>= "1.6.2"}
+  "eqaf" {>= "0.5"}
+  "mirage-crypto" {>= "0.6.1"}
+  "mirage-crypto-rng" {>= "0.6.1"}
   "scrypt-kdf" {>= "1.0.0"}
-  "digestif" {>= "0.7.0"}
-  "core" {>= "v0.9.0"}
-  "eqaf" {>= "0.3"}
-  "bisect_ppx" {>= "1.4.0"}
 ]

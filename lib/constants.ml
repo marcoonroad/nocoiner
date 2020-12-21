@@ -1,10 +1,12 @@
-module Sys = Core.Sys
-module Option = Core.Option
-module Int = Core.Int
+(* module Sys = Base.Sys *)
+module Option = Base.Option
+module Int = Base.Int
 
 let get variable default =
-  let optional = Sys.getenv variable in
-  Option.value optional ~default
+  try
+    let value = Sys.getenv variable in
+    if value = "" then default else value
+  with _ -> default
 
 
 let _KDF_COST = get "NOCOINER_KDF_COST" "8192" |> Int.of_string

@@ -3,7 +3,6 @@
 OCAML_VERSION := $(shell opam var switch)
 
 .PHONY: default
-
 default: build
 
 test: build
@@ -11,10 +10,19 @@ test: build
 	@ dune build @test/spec/runtest -f --no-buffer
 
 build:
-	@ dune build -j 1
+	@ dune build
 
 install: build
 	@ dune install
+
+.PHONY: install-check
+install-check:
+	@ opam pin add nocoiner.dev . --no-action --working-dir --yes
+	@ opam depext nocoiner --yes --with-test --yes
+	@ opam install . --deps-only --with-doc --with-test --working-dir --yes
+	@ dune build
+	@ opam pin remove nocoiner --working-dir --yes
+	@ opam remove nocoiner --yes
 
 uninstall:
 	@ dune uninstall
@@ -136,6 +144,11 @@ bench: clean build
 binary: clear
 	@ dune build --profile deploy
 	@ cp `dune exec --profile deploy -- which nocoiner` ./nocoiner.exe
+	@ chmod a+rx ./nocoiner.exe
+
+binary-test: clear
+	@ dune build
+	@ cp `dune exec -- which nocoiner` ./nocoiner.exe
 	@ chmod a+rx ./nocoiner.exe
 
 docker-system-prune:

@@ -2,7 +2,7 @@
  (name nocoiner)
  (public_name nocoiner)
  (wrapped true)
- (libraries core nocrypto.unix nocrypto digestif digestif.c eqaf eqaf.cstruct
+ (libraries base base64 mirage-crypto mirage-crypto-rng mirage-crypto-rng.unix eqaf
    scrypt-kdf)
  (synopsis "The Nocoiner module for nocoiner library.")
  (preprocess

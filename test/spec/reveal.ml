@@ -1,4 +1,4 @@
-module List = Core.List
+module List = Base.List
 
 let reason = Nocoiner.Reasons.BindingFailure
 
@@ -57,7 +57,7 @@ let __deterministic_opening _ =
   let p _ = _SECRET_3 = f () in
   Alcotest.(check bool) "replayable opening" true @@ __loop p 0 50 ;
   let p i =
-    let secret = Core.String.sub _SECRET_3 ~pos:0 ~len:i in
+    let secret = Base.String.sub _SECRET_3 ~pos:0 ~len:i in
     let commitment, opening = Nocoiner.commit secret in
     secret = Nocoiner.reveal ~commitment ~opening
   in

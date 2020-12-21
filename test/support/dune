@@ -1,4 +1,4 @@
-;; wrapper library just to enable optional core_bench
+;; wrapper library just to enable optional base_bench
 ;; library installation on ocaml versions >= 4.04.1
 
 (library
@@ -6,4 +6,4 @@
  (optional)
  (public_name nocoiner.bench)
  (modules nocoiner_bench)
- (libraries core_bench nocoiner))
+ (libraries base_bench nocoiner))

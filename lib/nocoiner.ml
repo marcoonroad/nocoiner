@@ -1,6 +1,6 @@
 module Reasons = Exceptions
-module String = Core.String
-module List = Core.List
+module String = Base.String
+module List = Base.List
 
 let __concat_on separator left right = left ^ separator ^ right
 

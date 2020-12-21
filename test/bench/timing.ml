@@ -1,6 +1,6 @@
 open Nocoiner_bench
 open Core_bench.Bench
-module Command = Core.Command
+module Command = Base.Command
 
 let reveals c o =
   try

@@ -1,8 +1,8 @@
-module List = Core.List
+module List = Base.List
 
 let hash data = Cstruct.of_string @@ Hashing.raw_hash data
 
-let xor = Nocrypto.Uncommon.Cs.xor
+let xor = Helpers.cstruct_xor
 
 let id () =
   let timestamp = hash @@ string_of_float @@ Unix.gettimeofday () in

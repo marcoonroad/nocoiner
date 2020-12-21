@@ -1,5 +1,5 @@
-module Int = Core.Int
-module String = Core.String
+module Int = Base.Int
+module String = Base.String
 
 (*
 let __nullchar = Char.unsafe_chr 0
@@ -44,3 +44,22 @@ let unpad msg =
   then String.sub msg ~pos:0 ~len:(length - padsize)
   else msg
 
+
+let __get_uint8 cstruct index =
+  try Cstruct.get_uint8 cstruct index with
+  | Invalid_argument _ -> 0
+
+let cstruct_xor left right =
+  let length = max (Cstruct.len left) (Cstruct.len right) in
+  let result = Cstruct.create length in
+  let rec __loop index =
+    if index = length then () else begin
+      let left_byte = __get_uint8 left index in
+      let right_byte = __get_uint8 right index in
+      let xored_byte = left_byte lxor right_byte in
+      Cstruct.set_uint8 result index xored_byte ;
+      __loop (index + 1)
+    end
+  in
+  __loop 0 ;
+  result

@@ -1,9 +1,9 @@
-module String = Core.String
-module AES = Nocrypto.Cipher_block.AES.CBC
+module String = Base.String
+module AES = Mirage_crypto.Cipher_block.AES.CBC
 
-let _MIN_BITS = Entropy.min_bits (32 * 8)
+let _MIN_BITS = Cstruct.of_string @@ (String.make 1 '\xf0' ^ String.make 31 '\x00')
 
-let _MAX_BITS = Entropy.max_bits (32 * 8)
+let _MAX_BITS = Cstruct.of_string @@ String.make 32 '\xff'
 
 let __kdf key =
   let aes_salt = _MIN_BITS in
