@@ -6,4 +6,4 @@
  (optional)
  (public_name nocoiner.bench)
  (modules nocoiner_bench)
- (libraries base_bench nocoiner))
+ (libraries core core_bench nocoiner))
