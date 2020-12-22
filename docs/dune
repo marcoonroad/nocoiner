@@ -1,1 +1,1 @@
-(dirs :standard \ vendor)
+(dirs :standard \ vendor _site .bundle)

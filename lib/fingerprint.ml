@@ -1,10 +1,8 @@
-module List = Core.List
+module List = Base.List
 
-let hash data = Cstruct.of_hex @@ Hashing.hash data
+let hash data = Cstruct.of_string @@ Hashing.raw_hash data
 
-let xor = Nocrypto.Uncommon.Cs.xor
-
-let xor_list = List.reduce_exn ~f:xor
+let xor = Helpers.cstruct_xor
 
 let id () =
   let timestamp = hash @@ string_of_float @@ Unix.gettimeofday () in
@@ -12,6 +10,6 @@ let id () =
   let hostname = hash @@ Unix.gethostname () in
   let cwd = hash @@ Unix.getcwd () in
   let context =
-    Cstruct.to_string @@ xor_list [ timestamp; pid; hostname; cwd ]
+    timestamp |> xor pid |> xor hostname |> xor cwd |> Cstruct.to_string
   in
   Encoding.encode @@ Hashing.raw_hash context

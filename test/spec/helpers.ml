@@ -1,4 +1,4 @@
-module String = Core.String
+module String = Base.String
 
 let __split ~on payload =
   match String.split ~on payload with
