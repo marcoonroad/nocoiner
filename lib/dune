@@ -6,4 +6,4 @@
    scrypt-kdf)
  (synopsis "The Nocoiner module for nocoiner library.")
  (preprocess
-  (pps bisect_ppx -conditional -no-comment-parsing)))
+  (pps bisect_ppx)))
