@@ -3,18 +3,26 @@
 OCAML_VERSION := $(shell opam var switch)
 
 .PHONY: default
-
 default: build
 
 test: build
 	@ opam lint
-	@ dune build @test/spec/runtest -f --no-buffer -j 1
+	@ dune build @test/spec/runtest -f --no-buffer
 
 build:
-	@ dune build -j 1
+	@ dune build
 
 install: build
 	@ dune install
+
+.PHONY: install-check
+install-check:
+	@ opam pin add nocoiner.dev . --no-action --working-dir --yes
+	@ opam depext nocoiner --yes --with-test --yes
+	@ opam install . --deps-only --with-doc --with-test --working-dir --yes
+	@ dune build
+	@ opam pin remove nocoiner --working-dir --yes
+	@ opam remove nocoiner --yes
 
 uninstall:
 	@ dune uninstall
@@ -22,6 +30,8 @@ uninstall:
 clear:
 	@ rm -rfv bisect*.out
 	@ dune clean
+
+clean: clear
 
 coverage: clear
 	@ mkdir -p docs/
@@ -71,11 +81,14 @@ docs: build
 	@ mv ./_build/default/_doc/_html/* ./docs/apiref/
 
 pin:
-	@ opam pin add nocoiner . -n --yes
+	@ opam pin add nocoiner . -n --yes --working-dir
+
+unpin:
+	@ opam pin remove nocoiner --yes
 
 deps:
-	@ opam install . --deps-only --yes
-	@ opam install alcotest core --yes # force such test dependences
+	@ opam install . --deps-only --yes --working-dir
+	@ opam install alcotest --yes # force such test dependences
 
 dev-deps:
 	@ opam install \
@@ -87,18 +100,20 @@ dev-deps:
 		merlin \
 		bisect_ppx \
 		utop \
+		core_bench \
 		--yes
-	@ opam update --yes
-	@ opam upgrade \
-		odoc \
-		ocveralls \
-		alcotest \
-		ocp-indent \
-		ocamlformat \
-		merlin \
-		bisect_ppx \
-		utop \
-		--yes
+#	@ opam update --yes
+#	@ opam upgrade \
+#		odoc \
+#		ocveralls \
+#		alcotest \
+#		ocp-indent \
+#		ocamlformat \
+#		merlin \
+#		bisect_ppx \
+#		utop \
+#		core_bench \
+#		--yes
 
 lint-format:
 	@ opam install ocamlformat --yes
@@ -117,10 +132,23 @@ local-site-setup:
 local-site-start:
 	@ cd docs && bundle exec jekyll serve && cd ..
 
+bench: clean build
+	@ opam install core_bench --yes
+	@ NOCOINER_KDF_COST=2 \
+	  NOCOINER_KDF_WORKERS=1 \
+	  dune build @test/bench/runtest -f --no-buffer --auto-promote \
+	  --diff-command="git diff --unified=10 --break-rewrites --no-index --exit-code --histogram --word-diff=none --color --no-prefix" || echo \
+	  "\n\n=== Differences detected! ===\n\n"
+
 # to run inside docker alpine context
 binary: clear
 	@ dune build --profile deploy
 	@ cp `dune exec --profile deploy -- which nocoiner` ./nocoiner.exe
+	@ chmod a+rx ./nocoiner.exe
+
+binary-test: clear
+	@ dune build
+	@ cp `dune exec -- which nocoiner` ./nocoiner.exe
 	@ chmod a+rx ./nocoiner.exe
 
 docker-system-prune:

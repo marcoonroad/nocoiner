@@ -1,0 +1,74 @@
+name: Windows-CI
+
+on:
+  push:
+    branches:
+      - stable
+      - master
+      - development
+      - deploy
+      - release
+      - feature/*
+      - feat/*
+      - ft/*
+      - patch/*
+      - bugfix/*
+      - fix/*
+      - doc/*
+      - docs/*
+      - chore/*
+      - refactor/*
+      - style/*
+  pull_request:
+    branches:
+      - stable
+      - master
+      - development
+      - deploy
+      - release
+      - feature/*
+      - feat/*
+      - ft/*
+      - patch/*
+      - bugfix/*
+      - fix/*
+      - doc/*
+      - docs/*
+      - chore/*
+      - refactor/*
+      - style/*
+
+  workflow_dispatch:
+
+jobs:
+  build:
+    strategy:
+      fail-fast: false
+      matrix:
+        package:
+          - nocoiner
+        os:
+          - windows-latest
+        ocaml-version:
+          - 4.08.0
+          - 4.08.1
+          - 4.09.1
+          - 4.10.1
+          - 4.11.0
+
+    runs-on: ${{ matrix.os }}
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Use OCaml ${{ matrix.ocaml-version }}
+        uses: avsm/setup-ocaml@v1
+        with:
+          ocaml-version: ${{ matrix.ocaml-version }}
+
+      - run: opam pin add ${{ matrix.package }}.dev . --no-action
+      - run: opam depext ${{ matrix.package }} --yes --with-test
+      - run: opam install . --deps-only --with-doc --with-test
+      - run: opam exec -- dune build
+      - run: opam exec -- dune build @test/spec/runtest

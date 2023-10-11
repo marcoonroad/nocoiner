@@ -191,6 +191,67 @@ The complete API reference is available [here][7]. Coverage reports are
 generated too, please refer to the respective [page][8].
 
 
+### Cryptoanalysis
+
+We have performed some benchmarks on valid inputs and on invalid inputs as well.
+This is just to discover and prove exploitable loopholes. The kind of side-channel
+vulnerabilities shown on version `1.0.0` are related to _timing attacks_. The used
+_Key Derivation Function_ on both `commit` and `reveal` phases conceals a lot the
+response time if this library is used as an _oracle_ (that is, an external server).
+On the other hand, this algorithm is open and then the attacker can pre-compute the
+derivation keys, and just perform her own cryptoanalysis on the next steps of the
+algorithm.
+
+Assuming that our _Nocoiner_ algorithm is just a black-box (oracle) where all the
+steps are called "atomically", there are still some exploitable information if the
+attacker gains access on the host machine for the oracle service. The benchmarks
+provided with the `core_bench` library only work well for functions halting under
+milliseconds, the KDF imposes a computation around few seconds. Due that issue, we
+execute the benchmarks with a lower KDF cost (just to cover the possibility of
+pre-computed derived keys, and also to remove timing noise imposed by a KDF with
+stronger cycles). To run the benchmarks, just type `$ make bench` on this project's
+root directory.
+
+We will only take the relevant information (with major differences). The version
+`1.0.0` is vulnerable during the opening phase, mostly 'cause:
+
+- We compare the tags for the authenticated ciphertext in non-constant /
+  non-linear time. This is the most famous kind of exploitable timing attack.
+- We don't decypher the AES ciphertext even if the opening key is wrong (don't
+  pass the MAC tag test). The result plaintext will be ignored 'cause the
+  authentication failed, but decryption must be performed to not leak side
+  information for the attacker.
+
+The benchmarks results stored on this repository were performed on an Intel(R)
+Dual-Core Celeron(R) of 1GHz each (both vulnerable to Meltdown, Spectre and MDS
+CPU bugs, and possibly some NSA hardware backdoors too, you know). The first test
+is the one with valid inputs, and the rest are evaluated with invalid inputs:
+
+<p></p>
+
+| Name               | Time/Run | Cycls/Run | mWd/Run | mWd Overhd | mjWd/Run | mjWd Overhd |  mGC/Run | Percentage |
+|:-------------------|---------:|----------:|--------:|-----------:|---------:|------------:|---------:|-----------:|
+| bound opening      | 830.05us |  863.66kc | 19.77kw |     24.18w |   17.87w |     116.97w | 70.61e-3 |    100.00% |
+| unbound commitment | 809.76us |  842.54kc | 19.56kw |     28.59w |   20.29w |    -219.19w | 69.79e-3 |     97.56% |
+| unbound opening    | 807.82us |  840.52kc | 19.56kw |     28.59w |   20.29w |    -219.19w | 69.79e-3 |     97.32% |
+
+<div align="center" style="text-align: center;"><center>
+<i>This table shows informations about the GC, minor heap & major heap. All cases
+were executed with major heap compaction disabled to not mask execution time.</i>
+</center></div>
+
+<p></p>
+
+As you can see, there's much more computations performed on valid/bound inputs than on unbound inputs. Inputs
+are bound (the opening key and the commitment box) if they were previously computed during commitment phase.
+Otherwise, the inputs are unbound _even if they were computed over the same secret during commitment_. This
+is a huge important thing when we want a group of commitments (performed by many parties) to be independent
+of each other. The security patch introduced on version `1.0.1` uses the [eqaf][10] library to compare in
+constant time the MAC tags, and we also force decryption step even if a MAC tag mismatch occurs (obviously
+the decrypted plain-text is ignored in this case and the whole opening phase fails).
+
+
+
 ### Disclaimer
 
 This library was not fully tested against side-channel attacks. Keep in mind
@@ -218,3 +279,4 @@ process context).
   [7]: https://marcoonroad.dev/nocoiner/apiref/nocoiner/Nocoiner/index.html
   [8]: https://marcoonroad.dev/nocoiner/apicov/index.html
   [9]: https://github.com/marcoonroad/nocoiner/issues/1
+  [10]: https://github.com/mirage/eqaf

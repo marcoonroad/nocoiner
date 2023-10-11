@@ -1,6 +1,6 @@
 module Reasons = Exceptions
-module String = Core.String
-module List = Core.List
+module String = Base.String
+module List = Base.List
 
 let __concat_on separator left right = left ^ separator ^ right
 
@@ -14,7 +14,7 @@ let commit payload =
   let key = Entropy.key () in
   let iv = Entropy.iv () in
   let metadata = Cstruct.of_string @@ Fingerprint.id () in
-  let message = Cstruct.of_string @@ Encoding.encode payload in
+  let message = Cstruct.of_string payload (* @@ Encoding.encode payload *) in
   let cipher, tag = Encryption.encrypt ~key ~iv ~metadata ~message in
   let commitment = __join ~on:"@" [ metadata; iv; cipher; tag ] in
   let opening = Encoding.encode_blob key in
@@ -46,4 +46,5 @@ let reveal ~commitment ~opening =
   let payload =
     Encryption.decrypt ~reason:BindingFailure ~key ~iv ~metadata ~cipher ~tag
   in
-  Encoding.decode @@ Cstruct.to_string payload
+  (* Encoding.decode @@ *) Cstruct.to_string payload
+
